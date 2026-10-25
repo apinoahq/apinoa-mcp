@@ -78,7 +78,7 @@ const server = await createApinoaServer({ apiKey: process.env.APINOA_API_KEY });
 
 ## Related
 
-- [apinoa](https://www.npmjs.com/package/apinoa): the TypeScript SDK
+- [@apinoa/sdk](https://www.npmjs.com/package/@apinoa/sdk): the TypeScript SDK
 - [apinoa on PyPI](https://pypi.org/project/apinoa/): the Python SDK
 - [API documentation](https://apinoa.com/docs)
 
