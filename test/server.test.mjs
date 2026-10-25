@@ -137,11 +137,37 @@ test("translate_image returns the translated picture as image content", async ()
   assert.match(res.content[1].text, /3 text regions/);
 });
 
-test("an answer too large for the model's context is cut, and says so", async () => {
+test("an answer too large for the model's context keeps whole items, stays valid JSON, and says what is missing", async () => {
   const fetch = fakeFetch({ "GET /v1/walmart/search": () => [200, { success: true, data: { items: Array.from({ length: 500 }, (_, i) => ({ title: `item ${i}` })) } }] });
   const client = await connect({ catalog: CATALOG, fetch, maxResultChars: 1000 });
   const res = await client.callTool({ name: "search_products", arguments: { platform: "walmart", query: "x" } });
+  const page = JSON.parse(res.content[0].text);
+  assert.ok(res.content[0].text.length <= 1000);
+  assert.ok(page.items.length > 1 && page.items.length < 500);
+  assert.equal(page.items[0].title, "item 0");
+  assert.match(res.content[1].text, new RegExp(`^Showing ${page.items.length} of the 500 items`));
+});
+
+test("an answer with no item list that is still too large is cut, and says so", async () => {
+  const fetch = fakeFetch({ "GET /v1/walmart/product": () => [200, { success: true, data: { title: "x".repeat(5000) } }] });
+  const client = await connect({ catalog: CATALOG, fetch, maxResultChars: 1000 });
+  const res = await client.callTool({ name: "get_product", arguments: { platform: "walmart", id: "1" } });
   assert.match(res.content[0].text, /\[cut at 1000 of \d+ characters/);
+});
+
+test("a post's media keeps its main file but not every rendition; a product's variants stay", async () => {
+  const media = [{ type: "video", url: "https://cdn/v.mp4", thumbnailUrl: "https://cdn/t.jpg", variants: [{ url: "https://cdn/v-720.mp4" }, { url: "https://cdn/v-360.mp4" }] }];
+  const fetch = fakeFetch({
+    "GET /v1/tiktok/posts": () => [200, { success: true, data: { items: [{ id: "1", media, quoteOf: { id: "0", media } }], cursor: "c2" } }],
+    "GET /v1/walmart/product": () => [200, { success: true, data: { title: "Shoe", variants: [{ id: "v1", options: { size: "9" } }] } }],
+  });
+  const client = await connect({ catalog: CATALOG, fetch });
+  const posts = JSON.parse((await client.callTool({ name: "list_social_posts", arguments: { platform: "tiktok", params: { username: "a" } } })).content[0].text);
+  assert.deepEqual(posts.items[0].media, [{ type: "video", url: "https://cdn/v.mp4", thumbnailUrl: "https://cdn/t.jpg" }]);
+  assert.equal(posts.items[0].quoteOf.media[0].variants, undefined, "nested posts too");
+  assert.equal(posts.cursor, "c2");
+  const product = JSON.parse((await client.callTool({ name: "get_product", arguments: { platform: "walmart", id: "1" } })).content[0].text);
+  assert.deepEqual(product.variants, [{ id: "v1", options: { size: "9" } }]);
 });
 
 test("without a catalog the live one is read, and when it cannot be, the bundled snapshot is used", async () => {

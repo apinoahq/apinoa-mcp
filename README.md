@@ -63,8 +63,9 @@ Every tool only reads data.
 | `APINOA_API_KEY` | — | Required for every data call. |
 | `APINOA_BASE_URL` | `https://gateway.apinoa.com` | |
 
-Answers larger than 100,000 characters are cut, with a note, to keep the model's context usable; ask for
-fewer items or a narrower query.
+To keep the model's context usable, a post's media lists its main file and thumbnail but not every other
+size of it (the SDKs and the API return all of them). An answer still over 100,000 characters keeps as many
+whole items as fit, with a note saying how many were left out; ask for fewer items or a narrower query.
 
 ## Use as a library
 

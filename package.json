@@ -1,6 +1,6 @@
 {
   "name": "apinoa-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for apinoa: marketplace, social and image-translation data as tools for Claude, Cursor and any MCP client.",
   "license": "MIT",
   "homepage": "https://apinoa.com/docs",

@@ -11,7 +11,7 @@ import { z } from "zod";
 import { ApiError, callOperation, download, fetchCatalog, translateImage, type ApiOptions, type CatalogEntry } from "./api.js";
 import SNAPSHOT from "./catalog.snapshot.js";
 
-export const VERSION = "0.1.0";
+export const VERSION = "0.1.1";
 
 export interface ServerOptions {
   /** Defaults to APINOA_API_KEY. Listing platforms works without one; every data call needs it. */
@@ -116,12 +116,59 @@ function describePlatform(e: CatalogEntry, operation: string): string {
   return `- ${e.id}${price}: ${props.map((p) => (required.has(p) ? `${p}*` : p)).join(", ") || "(no parameters)"}`;
 }
 
-function result(data: unknown, maxChars: number): CallToolResult {
-  let text = JSON.stringify(data);
-  if (text.length > maxChars) {
-    text = `${text.slice(0, maxChars)}\n…[cut at ${maxChars} of ${text.length} characters; ask for fewer items (params.limit) or a narrower query]`;
+/**
+ * A social post's media lists every rendition of each file (sizes, bitrates): on Threads that is three
+ * quarters of a search answer. The model needs one, so each media keeps its main url, thumbnail and size,
+ * and its `variants` are left out. Only media's: a product's `variants` (sizes, colours) are data.
+ */
+function withoutRenditions(data: unknown): unknown {
+  if (Array.isArray(data)) return data.map(withoutRenditions);
+  if (data === null || typeof data !== "object") return data;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(data)) {
+    out[k] =
+      k === "media" && Array.isArray(v)
+        ? v.map((m) => {
+            if (m === null || typeof m !== "object") return m;
+            const { variants: _renditions, ...rest } = m as Record<string, unknown>;
+            return withoutRenditions(rest);
+          })
+        : withoutRenditions(v);
   }
-  return { content: [{ type: "text", text }] };
+  return out;
+}
+
+function result(raw: unknown, maxChars: number): CallToolResult {
+  const data = withoutRenditions(raw);
+  const text = JSON.stringify(data);
+  if (text.length <= maxChars) return { content: [{ type: "text", text }] };
+
+  // Too large: keep whole items, so the answer stays valid JSON — as many as fit, then say what is missing.
+  const items = (data as { items?: unknown })?.items;
+  if (Array.isArray(items) && items.length > 1) {
+    const page = (n: number) => JSON.stringify({ ...(data as object), items: items.slice(0, n) });
+    let lo = 1;
+    let hi = items.length - 1;
+    while (lo < hi) {
+      const mid = Math.ceil((lo + hi) / 2);
+      if (page(mid).length <= maxChars) lo = mid;
+      else hi = mid - 1;
+    }
+    if (page(lo).length <= maxChars) {
+      return {
+        content: [
+          { type: "text", text: page(lo) },
+          {
+            type: "text",
+            text: `Showing ${lo} of the ${items.length} items on this page: the whole page is ${text.length} characters, over the ${maxChars} limit. For the other ${items.length - lo}, ask again with a smaller params.limit where the platform takes one, or a narrower query.`,
+          },
+        ],
+      };
+    }
+  }
+  return {
+    content: [{ type: "text", text: `${text.slice(0, maxChars)}\n…[cut at ${maxChars} of ${text.length} characters; ask for fewer items (params.limit) or a narrower query]` }],
+  };
 }
 
 function failure(e: unknown): CallToolResult {
