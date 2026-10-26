@@ -1,7 +1,7 @@
 {
   "name": "apinoa-mcp",
-  "version": "0.1.1",
-  "description": "MCP server for apinoa: marketplace, social and image-translation data as tools for Claude, Cursor and any MCP client.",
+  "version": "0.2.0",
+  "description": "MCP server for apinoa: marketplace and social data for Claude, Cursor and any MCP client. Code mode: the model writes TypeScript against a typed client, run in a sandbox.",
   "license": "MIT",
   "homepage": "https://apinoa.com/docs",
   "repository": {
@@ -9,7 +9,19 @@
     "url": "git+https://github.com/apinoahq/apinoa-mcp.git"
   },
   "bugs": "https://github.com/apinoahq/apinoa-mcp/issues",
-  "keywords": ["mcp", "model-context-protocol", "apinoa", "amazon", "walmart", "shopify", "tiktok", "reddit", "youtube"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "code-mode",
+    "apinoa",
+    "amazon",
+    "walmart",
+    "shopify",
+    "tiktok",
+    "instagram",
+    "reddit",
+    "youtube"
+  ],
   "type": "module",
   "bin": {
     "apinoa-mcp": "dist/cli.js"
@@ -22,17 +34,21 @@
       "default": "./dist/server.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "build": "rm -rf dist && tsc && chmod +x dist/cli.js",
     "test": "npm run build && node --test test/*.test.mjs",
-    "test:live": "npm run build && node --test test/live/*.test.mjs"
+    "test:live": "npm run build && node --test test/live/*.test.mjs",
+    "gen:schema": "node scripts/gen-schema.mjs ../../apps/web/public/openapi.json"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
+    "deno": "^2.9.6",
     "zod": "^3.25.76"
   },
   "devDependencies": {

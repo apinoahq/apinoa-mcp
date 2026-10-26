@@ -1,185 +1,44 @@
 /**
- * The apinoa MCP server: a handful of tools named by what an assistant wants ("search products", "get a
- * social profile"), each taking a `platform`, rather than one tool per endpoint. Fewer tools are chosen
- * between more accurately, and the platform list and each platform's parameters come from the live
- * catalog, so a platform added to the API appears here without a new release.
+ * The apinoa MCP server.
+ *
+ * Code mode (the default) exposes three tools: `search_docs` finds the operations for a task with their
+ * parameters, costs and the fields they return; `execute` runs TypeScript the model writes against a typed
+ * `apinoa` client in a sandbox, so a task of hundreds of calls is one tool call and only the result enters the
+ * conversation; `translate_image` returns an image, which code cannot. APINOA_MCP_MODE=tools serves the 0.1
+ * tool set instead (one tool call per API call).
+ *
+ * The platforms, operations and parameters come from the live catalog, so a platform added to apinoa appears
+ * here without a new release.
  */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 
-import { ApiError, callOperation, download, fetchCatalog, translateImage, type ApiOptions, type CatalogEntry } from "./api.js";
+import { fetchCatalog, translateImage, download, type ApiOptions, type CatalogEntry } from "./api.js";
 import SNAPSHOT from "./catalog.snapshot.js";
+import { declarations, operations, overview, sandboxOperations, searchDocs, type Operation } from "./code/docs.js";
+import { Sandbox, denoRuns, findDeno, type SandboxOptions } from "./code/sandbox.js";
+import { failure, registerLegacyTools } from "./legacy.js";
 
-export const VERSION = "0.1.1";
+export const VERSION = "0.2.0";
 
 export interface ServerOptions {
-  /** Defaults to APINOA_API_KEY. Listing platforms works without one; every data call needs it. */
+  /** Defaults to APINOA_API_KEY. Docs work without one; every data call needs it. */
   apiKey?: string;
   baseUrl?: string;
   fetch?: typeof fetch;
   timeoutMs?: number;
   /** Use this catalog instead of fetching the live one (tests, offline use). */
   catalog?: CatalogEntry[];
-  /** The most characters of JSON one tool answer may carry before it is cut, to protect the model's context. */
+  /** The most characters one tool answer may carry before it is cut, to protect the model's context. */
   maxResultChars?: number;
+  /** "code" (default) or "tools" (the 0.1 tool set). Defaults to APINOA_MCP_MODE. */
+  mode?: "code" | "tools";
+  /** Code mode: where the cache and store live, the deno binary, and the run limits. */
+  sandbox?: Partial<Omit<SandboxOptions, "api" | "userAgent">>;
 }
 
-/** Operations whose answer is a file, not data: reachable through the API and the SDKs, not as tool text. */
-const FILE_OPERATIONS = new Set(["tiktok/media"]);
+const DEFAULT_BUDGET = 500;
 
-interface ToolSpec {
-  name: string;
-  title: string;
-  /** The catalog operation this tool calls. */
-  operation: string;
-  summary: string;
-  /** The one input every platform takes for this operation, lifted out of `params` for the model. */
-  primary?: { name: string; description: string; required: boolean };
-  paging?: string;
-}
-
-const TOOLS: ToolSpec[] = [
-  {
-    name: "search_products",
-    title: "Search products",
-    operation: "search",
-    summary: "Search a marketplace's products by keyword. Returns a SearchResult: items with title, price, rating, seller and url.",
-    primary: { name: "query", description: "Keywords to search for.", required: true },
-    paging: "For the next page pass params.page = 2, 3, … (or params.cursor where the platform returns one).",
-  },
-  {
-    name: "get_product",
-    title: "Get a product",
-    operation: "product",
-    summary: "One product in full: variants, images, specifications, seller, delivery and price.",
-    primary: { name: "id", description: "The product id as the platform's search results carry it (an ASIN, a numeric id, shop/handle…), or its URL where accepted.", required: true },
-  },
-  {
-    name: "get_product_reviews",
-    title: "Get product reviews",
-    operation: "reviews",
-    summary: "A product's reviews, one page at a time.",
-    primary: { name: "id", description: "The product id, as get_product takes it.", required: true },
-    paging: "For the next page pass params.page or params.cursor as the previous answer indicates.",
-  },
-  {
-    name: "list_categories",
-    title: "List categories",
-    operation: "categories",
-    summary: "One level of a marketplace's category tree. Omit params.categoryId for the top level; pass an id for its children. Ids feed browse_category.",
-  },
-  {
-    name: "browse_category",
-    title: "Browse a category",
-    operation: "browse",
-    summary: "The products in one category, with no keyword. Get category ids from list_categories.",
-    paging: "For the next page pass params.page = 2, 3, …",
-  },
-  {
-    name: "get_social_profile",
-    title: "Get a social profile",
-    operation: "profile",
-    summary: "One account on a social platform: name, bio, follower counts, verification, links.",
-    primary: { name: "username", description: "The handle, with or without @, or the profile URL.", required: false },
-  },
-  {
-    name: "list_social_posts",
-    title: "List social posts",
-    operation: "posts",
-    summary:
-      "Posts from a social platform. What you pass in params picks the source: an account's (username), a search (query), a hashtag, community, sound, company, playlist, posts related to one (relatedTo) — or nothing for the trending feed.",
-    paging: "For the next page call again with params = { cursor } alone, using the cursor of the previous answer.",
-  },
-  {
-    name: "get_social_post",
-    title: "Get a social post",
-    operation: "post",
-    summary: "One post: text, author, media, counts, time.",
-    primary: { name: "id", description: "The post id or shortcode, or its URL.", required: true },
-  },
-  {
-    name: "get_social_comments",
-    title: "Get comments",
-    operation: "comments",
-    summary: "A post's comments (params.post), one comment's replies (params.comment), or an account's comments.",
-    paging: "For the next page call again with params = { cursor } alone.",
-  },
-];
-
-function describePlatform(e: CatalogEntry, operation: string): string {
-  const schema = e.params[operation];
-  const props = Object.keys(schema?.properties ?? {});
-  const required = new Set(schema?.required ?? []);
-  const cost = e.cost?.[operation];
-  const price = cost ? (cost.base === cost.max ? ` [${cost.base} unit${cost.base === 1 ? "" : "s"}]` : ` [${cost.base}–${cost.max} units]`) : "";
-  return `- ${e.id}${price}: ${props.map((p) => (required.has(p) ? `${p}*` : p)).join(", ") || "(no parameters)"}`;
-}
-
-/**
- * A social post's media lists every rendition of each file (sizes, bitrates): on Threads that is three
- * quarters of a search answer. The model needs one, so each media keeps its main url, thumbnail and size,
- * and its `variants` are left out. Only media's: a product's `variants` (sizes, colours) are data.
- */
-function withoutRenditions(data: unknown): unknown {
-  if (Array.isArray(data)) return data.map(withoutRenditions);
-  if (data === null || typeof data !== "object") return data;
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(data)) {
-    out[k] =
-      k === "media" && Array.isArray(v)
-        ? v.map((m) => {
-            if (m === null || typeof m !== "object") return m;
-            const { variants: _renditions, ...rest } = m as Record<string, unknown>;
-            return withoutRenditions(rest);
-          })
-        : withoutRenditions(v);
-  }
-  return out;
-}
-
-function result(raw: unknown, maxChars: number): CallToolResult {
-  const data = withoutRenditions(raw);
-  const text = JSON.stringify(data);
-  if (text.length <= maxChars) return { content: [{ type: "text", text }] };
-
-  // Too large: keep whole items, so the answer stays valid JSON — as many as fit, then say what is missing.
-  const items = (data as { items?: unknown })?.items;
-  if (Array.isArray(items) && items.length > 1) {
-    const page = (n: number) => JSON.stringify({ ...(data as object), items: items.slice(0, n) });
-    let lo = 1;
-    let hi = items.length - 1;
-    while (lo < hi) {
-      const mid = Math.ceil((lo + hi) / 2);
-      if (page(mid).length <= maxChars) lo = mid;
-      else hi = mid - 1;
-    }
-    if (page(lo).length <= maxChars) {
-      return {
-        content: [
-          { type: "text", text: page(lo) },
-          {
-            type: "text",
-            text: `Showing ${lo} of the ${items.length} items on this page: the whole page is ${text.length} characters, over the ${maxChars} limit. For the other ${items.length - lo}, ask again with a smaller params.limit where the platform takes one, or a narrower query.`,
-          },
-        ],
-      };
-    }
-  }
-  return {
-    content: [{ type: "text", text: `${text.slice(0, maxChars)}\n…[cut at ${maxChars} of ${text.length} characters; ask for fewer items (params.limit) or a narrower query]` }],
-  };
-}
-
-function failure(e: unknown): CallToolResult {
-  const text =
-    e instanceof ApiError
-      ? `${e.message}${e.requestId ? ` (requestId ${e.requestId})` : ""}${e.status === 402 ? " — the apinoa balance is used up; top up at https://apinoa.com/dashboard/balance" : ""}${e.status === 401 ? " — set APINOA_API_KEY to a key from https://apinoa.com/dashboard" : ""}`
-      : `apinoa: ${e instanceof Error ? e.message : String(e)}`;
-  return { isError: true, content: [{ type: "text", text }] };
-}
-
-/** Build the server. Resolves the catalog first (live, else the bundled snapshot) so the tools can name the platforms. */
 export async function createApinoaServer(options: ServerOptions = {}): Promise<McpServer> {
   const api: ApiOptions = {
     apiKey: options.apiKey ?? process.env.APINOA_API_KEY,
@@ -196,117 +55,29 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
       catalog = SNAPSHOT as CatalogEntry[];
     }
   }
-
-  const server = new McpServer({ name: "apinoa", version: VERSION });
-  const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
-
-  for (const spec of TOOLS) {
-    const platforms = catalog.filter((e) => e.operations.includes(spec.operation)).map((e) => e.id);
-    if (platforms.length === 0) continue;
-    const lines = catalog.filter((e) => platforms.includes(e.id)).map((e) => describePlatform(e, spec.operation));
-    const description = [
-      spec.summary,
-      "",
-      `Platforms and the params each accepts (* = required${spec.primary ? `; ${spec.primary.name} may be given at the top level` : ""}):`,
-      ...lines,
-      ...(spec.paging ? ["", spec.paging] : []),
-      "",
-      "Costs are in units of $0.001 at list price; a call that fails is not billed.",
-    ].join("\n");
-    const shape: Record<string, z.ZodTypeAny> = {
-      platform: z.enum(platforms as [string, ...string[]]).describe("Which platform to read."),
-    };
-    if (spec.primary) {
-      const field = z.string().min(1).describe(spec.primary.description);
-      shape[spec.primary.name] = spec.primary.required ? field : field.optional();
-    }
-    shape.params = z.record(z.unknown()).optional().describe("The platform's other parameters, by the names listed above.");
-
-    server.registerTool(spec.name, { title: spec.title, description, inputSchema: shape, annotations: { title: spec.title, ...readOnly } }, async (args: any) => {
-      try {
-        const params: Record<string, unknown> = { ...(args.params ?? {}) };
-        if (spec.primary && args[spec.primary.name] !== undefined) params[spec.primary.name] = args[spec.primary.name];
-        return result(await callOperation(api, args.platform, spec.operation, params), maxChars);
-      } catch (e) {
-        return failure(e);
-      }
-    });
+  const asked = options.mode ?? (process.env.APINOA_MCP_MODE === "tools" ? "tools" : process.env.APINOA_MCP_MODE === "code" ? "code" : undefined);
+  // Code mode needs Deno, which the package installs for the platforms Deno ships for. Elsewhere, unless code
+  // mode was asked for by name, the server serves the tool set instead of a code tool that cannot run.
+  let mode: "code" | "tools" = asked ?? "code";
+  if (!asked && !denoRuns(findDeno(options.sandbox?.deno))) {
+    mode = "tools";
+    console.error("apinoa-mcp: Deno was not found, so the per-operation tools are served instead of code mode. Install Deno (https://deno.com) or set APINOA_MCP_DENO to use code mode.");
   }
 
-  const imagePlatforms = catalog.filter((e) => e.operations.includes("image-search")).map((e) => e.id);
-  if (imagePlatforms.length) server.registerTool(
-    "search_products_by_image",
-    {
-      title: "Search products by image",
-      description:
-        "Find a marketplace's products that match a photo. Give the photo as a URL; it is downloaded and sent as the search image.\n\nPlatforms: " +
-        imagePlatforms.join(", "),
-      inputSchema: {
-        platform: z.enum(imagePlatforms as [string, ...string[]]).describe("Which marketplace to search."),
-        image_url: z.string().url().describe("An http(s) URL of a JPEG or PNG photo."),
-        params: z.record(z.unknown()).optional().describe("Other parameters of the platform's image-search (region, filters)."),
-      },
-      annotations: { title: "Search products by image", ...readOnly },
-    },
-    async (args: any) => {
-      try {
-        const img = await download(api, args.image_url);
-        const data = Buffer.from(img.bytes).toString("base64");
-        return result(await callOperation(api, args.platform, "image-search", { ...(args.params ?? {}), image: { contentType: img.contentType, data } }), maxChars);
-      } catch (e) {
-        return failure(e);
-      }
-    },
+  const server = new McpServer(
+    { name: "apinoa", version: VERSION },
+    mode === "code"
+      ? {
+          instructions:
+            "apinoa reads marketplaces (Amazon, Walmart, Shopify, TikTok Shop, AliExpress) and social platforms (TikTok, YouTube, Instagram, Threads, X, Reddit, LinkedIn). " +
+            "Find the operations and fields with search_docs, then call them from TypeScript in execute: fan out, page, filter and aggregate in the code, and return only the result.",
+        }
+      : undefined,
   );
+  const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
 
-  server.registerTool(
-    "call_apinoa",
-    {
-      title: "Call any apinoa operation",
-      description: [
-        "Call any operation of the apinoa API directly, for what the other tools do not cover (store catalogs, shipping quotes, groups, followers, LinkedIn jobs…).",
-        "Every platform and its operations (params of each are listed by list_platforms):",
-        ...catalog.map((e) => `- ${e.id}: ${e.operations.filter((op) => !FILE_OPERATIONS.has(`${e.id}/${op}`)).join(", ")}`),
-      ].join("\n"),
-      inputSchema: {
-        platform: z.string().describe("Platform id, e.g. amazon, reddit."),
-        operation: z.string().describe("Operation as written in the list, e.g. search, image-search, groups."),
-        params: z.record(z.unknown()).optional().describe("The operation's parameters."),
-      },
-      annotations: { title: "Call any apinoa operation", ...readOnly },
-    },
-    async (args: any) => {
-      if (FILE_OPERATIONS.has(`${args.platform}/${args.operation}`)) {
-        return failure(new ApiError(400, "FILE_OPERATION", `${args.platform}/${args.operation} returns a file; use the apinoa SDK or API for it`));
-      }
-      try {
-        return result(await callOperation(api, args.platform, args.operation, args.params ?? {}), maxChars);
-      } catch (e) {
-        return failure(e);
-      }
-    },
-  );
-
-  server.registerTool(
-    "list_platforms",
-    {
-      title: "List platforms",
-      description: "Every platform apinoa serves, its operations, what each costs, and the parameters each operation accepts. Free, and needs no key.",
-      inputSchema: {
-        platform: z.string().optional().describe("Only this platform's details."),
-      },
-      annotations: { title: "List platforms", ...readOnly },
-    },
-    async (args: any) => {
-      const entries = catalog!.filter((e) => !args.platform || e.id === args.platform);
-      const text = entries
-        .map((e) =>
-          [`## ${e.id} (${e.kind})${e.regions?.length ? ` — regions: ${e.regions.join(", ")}` : ""}`, ...e.operations.map((op) => describePlatform(e, op).replace(`- ${e.id}`, `- ${op}`))].join("\n"),
-        )
-        .join("\n\n");
-      return { content: [{ type: "text", text: text || `no platform ${args.platform}` }] };
-    },
-  );
+  if (mode === "tools") registerLegacyTools(server, api, catalog, maxChars);
+  else registerCodeTools(server, api, operations(catalog), options);
 
   server.registerTool(
     "translate_image",
@@ -346,4 +117,79 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
   );
 
   return server;
+}
+
+const EXAMPLE = `const page = await apinoa.tiktok.posts({ hashtag: "glassskin", limit: 50 });
+const authors = [...new Set(page.items.map((p) => p.author.handle))].slice(0, 10);
+const recent = await many(authors, (u) => apinoa.tiktok.posts({ username: u, limit: 30 }));
+return authors.map((u, i) => {
+  const views = (recent[i]?.items ?? []).map((p) => p.metrics?.views ?? 0).sort((a, b) => a - b);
+  return { author: u, median: views[Math.floor(views.length / 2)] ?? null };
+});`;
+
+function registerCodeTools(server: McpServer, api: ApiOptions, ops: Operation[], options: ServerOptions) {
+  const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
+  const sandbox = new Sandbox({ ...options.sandbox, api, userAgent: `apinoa-mcp/${VERSION} (code)` }, declarations(ops), sandboxOperations(ops));
+  const maxBudget = Number(process.env.APINOA_MCP_MAX_BUDGET ?? 20_000);
+  const platforms = [...new Set(ops.map((o) => o.platform))];
+
+  server.registerTool(
+    "search_docs",
+    {
+      title: "Search the apinoa docs",
+      description:
+        "Find how to do a task with apinoa: the matching operations as you call them in execute (e.g. apinoa.tiktok.posts({ hashtag })), every parameter, the cost per call, and the fields of what they return. " +
+        "Free: it calls nothing. Use it before writing code. Pass words ('tiktok hashtag videos', 'instagram reels of an account', 'amazon product reviews'), a platform, or a type name ('Post'); with neither you get the list of every operation.\n\n" +
+        `Platforms: ${platforms.join(", ")}.`,
+      inputSchema: {
+        query: z.string().optional().describe("What you want to do or read, in a few words, or a type name."),
+        platform: z.string().optional().describe("Only this platform's operations."),
+      },
+      annotations: { title: "Search the apinoa docs", readOnlyHint: true, openWorldHint: false },
+    },
+    async (args: any) => ({ content: [{ type: "text", text: searchDocs(ops, args.query ?? "", args.platform) }] }),
+  );
+
+  server.registerTool(
+    "execute",
+    {
+      title: "Run code against apinoa",
+      description: [
+        "Run TypeScript that calls the apinoa API, and get back only what it prints or returns. Use it for every data task, from one call to thousands: fan out over accounts or posts, follow pages, then filter, count, rank and average in the code, so raw API answers never fill the conversation.",
+        "",
+        "The code is the body of an async function: use await, and `return` a small result (aggregate, slice, pick the fields you need). In scope:",
+        "- apinoa.<platform>.<operation>(params): one API call, returns the answer's data; throws ApinoaError (code, status) on a refusal. search_docs lists the parameters and the fields returned.",
+        "- pages(op, params, { maxPages }): every item of a paged operation, following cursors (default 5 pages).",
+        "- many(items, fn, { concurrency }): fn over every item, 8 at a time by default; a failed item comes back undefined.",
+        "- store.save(name, value) / store.load(name) / store.list() / store.saveFile(name, base64): data kept on this machine between runs.",
+        "- usage: { calls, units, budget } of this run.",
+        "The code is type-checked before it runs: an operation, parameter or field that does not exist fails there, before anything is billed.",
+        "Each call costs units (1 unit = $0.001, per search_docs); the run stops once budget_units are spent. Answers are cached for 10 minutes, so re-running after a fix costs nothing for calls already made. Only the API is reachable from the code.",
+        "",
+        "Example:",
+        EXAMPLE,
+        "",
+        overview(ops).split("\n\nHelpers")[0],
+      ].join("\n"),
+      inputSchema: {
+        code: z.string().min(1).describe("TypeScript: the body of an async function. Return the result."),
+        budget_units: z.number().int().positive().max(maxBudget).optional().describe(`Most units this run may spend (default ${DEFAULT_BUDGET}, at most ${maxBudget}).`),
+        timeout_seconds: z.number().int().positive().max(1800).optional().describe("Stop the run after this long (default 300)."),
+      },
+      annotations: { title: "Run code against apinoa", ...readOnly },
+    },
+    async (args: any, extra: any) => {
+      const token = extra?._meta?.progressToken;
+      const onProgress =
+        token === undefined
+          ? undefined
+          : (s: { calls: number; units: number }) => {
+              Promise.resolve(
+                extra.sendNotification?.({ method: "notifications/progress", params: { progressToken: token, progress: s.calls, message: `${s.calls} calls, ${s.units} units` } }),
+              ).catch(() => {});
+            };
+      const run = await sandbox.run(args.code, args.budget_units ?? DEFAULT_BUDGET, (args.timeout_seconds ?? 300) * 1000, onProgress);
+      return { content: [{ type: "text", text: run.text }], ...(run.ok ? {} : { isError: true }) };
+    },
+  );
 }

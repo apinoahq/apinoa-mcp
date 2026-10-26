@@ -112,7 +112,7 @@ export async function translateImage(
 /** Download an image a tool was pointed at. */
 export async function download(o: ApiOptions, url: string, maxBytes = 20 * 1024 * 1024): Promise<{ bytes: Uint8Array; contentType: string }> {
   if (!/^https?:\/\//i.test(url)) throw new ApiError(400, "INVALID_IMAGE_URL", "image_url must be an http(s) URL");
-  const res = await o.fetch(url, { signal: AbortSignal.timeout(30_000) });
+  const res = await o.fetch(url, { signal: AbortSignal.timeout(30_000), headers: { "user-agent": "apinoa-mcp (+https://apinoa.com)", accept: "image/*" } });
   if (!res.ok) throw new ApiError(400, "IMAGE_DOWNLOAD_FAILED", `the image URL answered ${res.status}`);
   const bytes = new Uint8Array(await res.arrayBuffer());
   if (bytes.byteLength > maxBytes) throw new ApiError(413, "IMAGE_TOO_LARGE", `the image is over ${maxBytes / 1024 / 1024} MB`);

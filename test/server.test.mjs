@@ -1,4 +1,4 @@
-// The server through a real MCP client over an in-memory transport, with the API faked at fetch.
+// The 0.1 tool set (mode "tools") through a real MCP client over an in-memory transport, with the API faked at fetch.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -47,7 +47,7 @@ function fakeFetch(routes) {
 }
 
 async function connect(opts) {
-  const server = await createApinoaServer({ apiKey: "ak_test", baseUrl: "https://api.test", timeoutMs: 5000, ...opts });
+  const server = await createApinoaServer({ apiKey: "ak_test", baseUrl: "https://api.test", timeoutMs: 5000, mode: "tools", ...opts });
   const [a, b] = InMemoryTransport.createLinkedPair();
   const client = new Client({ name: "test", version: "0" });
   await Promise.all([server.connect(a), client.connect(b)]);
@@ -64,6 +64,7 @@ test("tools are named by intent, and each lists only the platforms that have its
   assert.match(search.description, /- walmart \[1 unit\]: query\*, page, priceMax/);
   assert.deepEqual(search.inputSchema.required.sort(), ["platform", "query"]);
   assert.ok(tools.every((t) => t.annotations?.readOnlyHint === true));
+  assert.ok(search._meta["anthropic/maxResultSizeChars"] >= 100_000, "Claude Code keeps answers up to the cap in the conversation");
 });
 
 test("search_products sends a GET with the key, the query and the extra params", async () => {
