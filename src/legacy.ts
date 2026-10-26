@@ -189,7 +189,7 @@ export function registerLegacyTools(server: McpServer, api: ApiOptions, catalog:
       const field = z.string().min(1).describe(spec.primary.description);
       shape[spec.primary.name] = spec.primary.required ? field : field.optional();
     }
-    shape.params = z.record(z.unknown()).optional().describe("The platform's other parameters, by the names listed above.");
+    shape.params = z.record(z.string(), z.unknown()).optional().describe("The platform's other parameters, by the names listed above.");
 
     server.registerTool(spec.name, { title: spec.title, description, inputSchema: shape, annotations: { title: spec.title, ...readOnly }, _meta }, async (args: any) => {
       try {
@@ -213,7 +213,7 @@ export function registerLegacyTools(server: McpServer, api: ApiOptions, catalog:
       inputSchema: {
         platform: z.enum(imagePlatforms as [string, ...string[]]).describe("Which marketplace to search."),
         image_url: z.string().url().describe("An http(s) URL of a JPEG or PNG photo."),
-        params: z.record(z.unknown()).optional().describe("Other parameters of the platform's image-search (region, filters)."),
+        params: z.record(z.string(), z.unknown()).optional().describe("Other parameters of the platform's image-search (region, filters)."),
       },
       annotations: { title: "Search products by image", ...readOnly },
       _meta,
@@ -241,7 +241,7 @@ export function registerLegacyTools(server: McpServer, api: ApiOptions, catalog:
       inputSchema: {
         platform: z.string().describe("Platform id, e.g. amazon, reddit."),
         operation: z.string().describe("Operation as written in the list, e.g. search, image-search, groups."),
-        params: z.record(z.unknown()).optional().describe("The operation's parameters."),
+        params: z.record(z.string(), z.unknown()).optional().describe("The operation's parameters."),
       },
       annotations: { title: "Call any apinoa operation", ...readOnly },
       _meta,

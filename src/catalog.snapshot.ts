@@ -1922,8 +1922,8 @@ const snapshot: unknown = [
      "limit": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 50,
-      "description": "Items per page, 1–50."
+      "maximum": 30,
+      "description": "Items per page, 1–30."
      },
      "cursor": {
       "type": "string",
@@ -1991,8 +1991,8 @@ const snapshot: unknown = [
      "limit": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 50,
-      "description": "Items per page, 1–50."
+      "maximum": 30,
+      "description": "Items per page, 1–30."
      },
      "cursor": {
       "type": "string",
@@ -2071,8 +2071,8 @@ const snapshot: unknown = [
      "limit": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 50,
-      "description": "Items per page, 1–50."
+      "maximum": 30,
+      "description": "Items per page, 1–30."
      },
      "cursor": {
       "type": "string",

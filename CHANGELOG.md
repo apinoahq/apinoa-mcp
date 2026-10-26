@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- zod 4 (4.6.7, the version the MCP SDK already uses): zod 3 had a high-severity advisory (GHSA-mrhx-c7xc-m3w5,
+  memory exhaustion on oversized collections), so `npm audit` on an install is now clean.
+
 ## 0.2.0
 
 - **Code mode is the default.** Three tools instead of thirteen: `search_docs` finds the operations for a task
