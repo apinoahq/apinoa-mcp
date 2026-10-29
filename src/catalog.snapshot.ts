@@ -15,7 +15,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 1,
+  "parserVersion": 3,
   "cost": {
    "browse": {
     "base": 1,
@@ -287,7 +287,7 @@ const snapshot: unknown = [
    "SG",
    "AU"
   ],
-  "parserVersion": 3,
+  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -750,7 +750,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -957,7 +957,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 4,
+  "parserVersion": 5,
   "cost": {
    "profile": {
     "base": 1,
@@ -1118,11 +1118,11 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 2,
+  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
-    "max": 2
+    "max": 5
    },
    "profiles": {
     "base": 1,
@@ -1425,7 +1425,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 2,
+  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -1713,7 +1713,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -1745,6 +1745,20 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Numeric Threads user id."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "username only. Attach from the same page, at no extra cost: posts (the creator's latest threads, ext.posts)."
      }
     },
     "additionalProperties": false,
@@ -1757,6 +1771,20 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Post shortcode, or the post URL (…/@user/post/<code> or …/t/<code>)."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Attach from the same page, at no extra cost: comments (the first replies, top order, ext.comments), related (the related threads Threads suggests beside it, ext.related)."
      }
     },
     "additionalProperties": false,
@@ -1797,6 +1825,20 @@ const snapshot: unknown = [
       ],
       "description": "query only: top (default) or recent."
      },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "username only. Attach from the same page, at no extra cost: profile (the creator's profile, ext.profile)."
+     },
      "cursor": {
       "type": "string",
       "minLength": 1,
@@ -1821,6 +1863,20 @@ const snapshot: unknown = [
        "recent"
       ],
       "description": "top (default) or recent."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Top order only. Attach from the same page, at no extra cost: post (the post itself, in `post`), related (the related threads Threads suggests beside it, ext.related)."
      },
      "cursor": {
       "type": "string",
@@ -1850,7 +1906,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -2118,7 +2174,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 6,
   "cost": {
    "search": {
     "base": 1,
@@ -2273,7 +2329,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -2574,7 +2630,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 2,
+  "parserVersion": 4,
   "cost": {
    "profile": {
     "base": 1,
@@ -2675,7 +2731,7 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
+  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
