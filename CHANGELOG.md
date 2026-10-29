@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.2.2
+
+- The server reports its package version to the client (0.2.1 still said 0.2.0).
+
+Code mode's types and the bundled catalog follow the API as of 2026-10-29:
+
+- New type `CaptionTrack`.
+- New type `MediaTag`.
+- New type `ProtectionPlan`.
+- `Account`: new `location`.
+- `AccountPage`: no longer `total`.
+- `AccountRef`: new `bio`, `bannerUrl`, `createdAt`, `links`, `private`, `category`, `location`.
+- `Audio`: new `coverUrl`, `durationSec`, `original`, `album`, `ext`.
+- `Broadcast`: new `ext`; no longer `scheduledAt`, `startedAt`, `endedAt`.
+- `CategoryList`: new `ext`.
+- `CategoryNode`: new `imageUrl`; no longer `productCount`.
+- `Comment`: new `entities`, `edited`; no longer `moreReplies.ids`.
+- `CommentPage`: new `order`, `post`.
+- `DeliveryOption`: new `ext`; no longer `guaranteedDays`, `membership`, `tracking`.
+- `FacetValue`: no longer `count`.
+- `GroupPage`: new `order`; no longer `total`.
+- `Job`: new `applyMethod`.
+- `JobPage`: new `items.insights`.
+- `LinkPreview`: new `ext`.
+- `MediaVariant`: new `codec`, `sizeBytes`, `fps`, `quality`, `ext`.
+- `MediaVideo`: new `ext`; no longer `creator`.
+- `Mention`: new `ext`.
+- `Offer`: new `shippingOptions`, `unitPrice`, `promotions`, `paymentOptions`.
+- `Place`: new `type`, `ext`; no longer `region`, `postalCode`.
+- `Poll`: new `ext`.
+- `Post`: new `edited`; no longer `metrics.liveViewers`.
+- `PostPage`: new `order`.
+- `Product`: new `offersSummary.ext`, `highlights`, `protectionPlans`, `package.ext`; no longer `offersSummary.url`, `package.lengthCm`, `package.widthCm`, `package.heightCm`, `package.soldInLot`, `wholesale`, `included`.
+- `Rating`: new `starCounts`.
+- `Review`: new `authorAvatarUrl`, `unhelpfulCount`, `recommended`, `badges`, `syndicatedFrom`, `productId`, `productImageUrl`, `variantId`, `language`.
+- `ReviewPage`: new `reviewSummary`, `reviewAspects`.
+- `SearchItem`: new `subscriptionPrice`, `description`, `fulfilledBy`, `offersSummary.ext`, `offers`, `variants`; no longer `conditionNote`, `offersSummary.url`, `purchaseLimit`, `listedAt`.
+- `SearchResult`: new `relatedSearches`, `ext`.
+- `Seller`: new `logoUrl`, `productCount`; no longer `detailedRatings`.
+- `ShippingOption`: new `ext`; no longer `guaranteedDays`, `membership`, `tracking`.
+- `SocialMedia`: new `id`, `title`, `hasAudio`, `tags`, `captions`.
+- `Variant`: new `name`, `images`; no longer `sku`, `bulkPrice`, `taxIncluded`.
+
 ## 0.2.1
 
 - zod 4 (4.6.7, the version the MCP SDK already uses): zod 3 had a high-severity advisory (GHSA-mrhx-c7xc-m3w5,

@@ -10,6 +10,8 @@
  * The platforms, operations and parameters come from the live catalog, so a platform added to apinoa appears
  * here without a new release.
  */
+import { createRequire } from "node:module";
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
@@ -19,7 +21,9 @@ import { declarations, operations, overview, sandboxOperations, searchDocs, type
 import { Sandbox, denoRuns, findDeno, type SandboxOptions } from "./code/sandbox.js";
 import { failure, registerLegacyTools } from "./legacy.js";
 
-export const VERSION = "0.2.0";
+// The published package's own version (dist/ and src/ both sit one level below package.json), so a release
+// cannot announce the previous one.
+export const VERSION: string = createRequire(import.meta.url)("../package.json").version;
 
 export interface ServerOptions {
   /** Defaults to APINOA_API_KEY. Docs work without one; every data call needs it. */

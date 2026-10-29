@@ -1,16 +1,46 @@
-# Publishes to npm when a GitHub Release is published. No token: npm trusted publishing (OIDC) for this
-# repository and workflow, with provenance.
+# Publishes to npm every version that is not there yet, on each push to main: the version in package.json is the
+# release, so a push that does not change it publishes nothing. After the upload, the tag and the GitHub Release
+# are made from that version's CHANGELOG section. No token: npm trusted publishing (OIDC) for this repository,
+# this workflow and the `npm` environment, with provenance.
 name: publish
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+# One release at a time: a second push waits, then finds its version on npm or publishes the next one.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      new: ${{ steps.version.outputs.new }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - id: version
+        name: is this version on npm yet?
+        run: |
+          name=$(node -p 'require("./package.json").name')
+          v=$(node -p 'require("./package.json").version')
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          code=$(curl -s -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/${name/\//%2f}/$v")
+          case $code in
+            200) echo "new=false" >> "$GITHUB_OUTPUT"; echo "$name $v is on npm already: nothing to publish" ;;
+            404) echo "new=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "npm answered $code for $name $v" >&2; exit 1 ;;
+          esac
+
   npm:
+    needs: version
+    if: needs.version.outputs.new == 'true'
     runs-on: ubuntu-latest
     environment: npm
     permissions:
@@ -24,8 +54,21 @@ jobs:
           registry-url: https://registry.npmjs.org
       # Trusted publishing needs npm 11.5.1 or later.
       - run: npm install -g npm@11.6.2
-      - name: the tag is the package version
-        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
       - run: npm ci
       - run: npm test
       - run: npm publish --provenance --access public
+
+  release:
+    needs: [version, npm]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - name: tag and release, with the version's CHANGELOG section as the notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ needs.version.outputs.version }}
+        run: |
+          awk -v h="## $V" '$0 == h { on = 1; next } /^## / && on { exit } on' CHANGELOG.md > notes.md
+          gh release create "v$V" --target "$GITHUB_SHA" --title "v$V" --notes-file notes.md
