@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.4
+
+Code mode's types and the bundled catalog follow the API as of 2026-10-30:
+
+- `google-shopping` `reviews`: `id` now says which products have reviews: only a product Google groups across stores, whose id is digits only. Another id answers `404 REVIEWS_NOT_FOUND`, with a message naming it.
+
 ## 0.2.3
 
 Code mode's types and the bundled catalog follow the API as of 2026-10-30:

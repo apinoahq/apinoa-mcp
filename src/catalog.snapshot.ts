@@ -2672,7 +2672,7 @@ const snapshot: unknown = [
      "id": {
       "type": "string",
       "pattern": "^(?:\\d{6,24}|c\\d{6,24}|p\\d{6,24}(?:-\\d{6,24})?)$",
-      "description": "The product, as a search item's `id` carries it."
+      "description": "The product, as a search item's `id` carries it. Only a product Google groups across stores (an id of digits only) has reviews."
      },
      "url": {
       "type": "string",
