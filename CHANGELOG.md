@@ -1,5 +1,54 @@
 # Changelog
 
+## 0.2.3
+
+Code mode's types and the bundled catalog follow the API as of 2026-10-30:
+
+- New operations: `GET /v1/app-store/search`, `GET /v1/app-store/app`, `GET /v1/app-store/reviews`, `GET /v1/baidu/search`, `GET /v1/baidu/suggestions`, `GET /v1/bing/search`, `GET /v1/bing/suggestions`, `POST /v1/chatgpt/answer`, `GET /v1/daum/search`, `GET /v1/daum/suggestions`, `GET /v1/duckduckgo/search`, `GET /v1/duckduckgo/suggestions`, `POST /v1/gemini/answer`, `GET /v1/google/search`, `GET /v1/google/suggestions`, `GET /v1/google/places`, `GET /v1/google/place`, `POST /v1/google-ai-mode/answer`, `POST /v1/google-aio/answer`, `GET /v1/google-play/search`, `GET /v1/google-play/app`, `GET /v1/google-play/reviews`, `GET /v1/google-shopping/search`, `GET /v1/google-shopping/product`, `GET /v1/google-shopping/reviews`, `GET /v1/google-trends/explore`, `GET /v1/google-trends/trending`, `GET /v1/naver/search`, `GET /v1/naver/suggestions`, `GET /v1/naver/places`, `GET /v1/naver/place`, `GET /v1/naver/reviews`, `POST /v1/naver-ai-brief/answer`, `POST /v1/naver-ai-tab/answer`, `GET /v1/seznam/search`, `GET /v1/seznam/suggestions`, `GET /v1/sogou/search`, `GET /v1/sogou/suggestions`, `GET /v1/tripadvisor/places`, `GET /v1/tripadvisor/place`, `GET /v1/tripadvisor/reviews`, `GET /v1/yahoo/search`, `GET /v1/yahoo/suggestions`, `GET /v1/yahoo-japan/search`, `GET /v1/yahoo-japan/suggestions`, `GET /v1/yandex/search`, `GET /v1/yandex/suggestions`, `GET /v1/yandex/places`, `GET /v1/yandex/place`, `GET /v1/yandex/reviews`.
+- New type `Address`.
+- New type `Answer`.
+- New type `AnswerMention`.
+- New type `AnswerResponse`.
+- New type `App`.
+- New type `AppResponse`.
+- New type `AppReview`.
+- New type `AppReviewsPage`.
+- New type `AppReviewsPageResponse`.
+- New type `AppsPage`.
+- New type `AppsPageResponse`.
+- New type `Block`.
+- New type `Card`.
+- New type `Citation`.
+- New type `Conversation`.
+- New type `Developer`.
+- New type `Hours`.
+- New type `PlaceReview`.
+- New type `PlaceReviewsPage`.
+- New type `PlaceReviewsPageResponse`.
+- New type `PlacesPage`.
+- New type `PlacesPageResponse`.
+- New type `Price`.
+- New type `Related`.
+- New type `RelatedItem`.
+- New type `Result`.
+- New type `ResultsPage`.
+- New type `ResultsPageResponse`.
+- New type `SerpItem`.
+- New type `SerpLink`.
+- New type `SerpPlace`.
+- New type `SerpPlaceResponse`.
+- New type `Source`.
+- New type `Suggestion`.
+- New type `Suggestions`.
+- New type `SuggestionsResponse`.
+- New type `TrendPoint`.
+- New type `TrendRegion`.
+- New type `TrendingItem`.
+- New type `TrendingPage`.
+- New type `TrendingPageResponse`.
+- New type `TrendsExplore`.
+- New type `TrendsExploreResponse`.
+
 ## 0.2.2
 
 - The server reports its package version to the client (0.2.1 still said 0.2.0).

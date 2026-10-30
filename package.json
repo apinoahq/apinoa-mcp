@@ -1,6 +1,6 @@
 {
   "name": "apinoa-mcp",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "MCP server for apinoa: marketplace and social data for Claude, Cursor and any MCP client. Code mode: the model writes TypeScript against a typed client, run in a sandbox.",
   "license": "MIT",
   "homepage": "https://apinoa.com/docs",

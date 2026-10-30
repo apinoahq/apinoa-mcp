@@ -736,6 +736,2754 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "app-store",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "app",
+   "reviews"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "NZ",
+   "IE",
+   "DE",
+   "FR",
+   "IT",
+   "ES",
+   "NL",
+   "BE",
+   "AT",
+   "CH",
+   "SE",
+   "NO",
+   "DK",
+   "FI",
+   "PL",
+   "PT",
+   "CZ",
+   "GR",
+   "HU",
+   "RO",
+   "TR",
+   "UA",
+   "IL",
+   "AE",
+   "SA",
+   "EG",
+   "ZA",
+   "NG",
+   "KE",
+   "IN",
+   "PK",
+   "ID",
+   "MY",
+   "SG",
+   "TH",
+   "VN",
+   "PH",
+   "JP",
+   "KR",
+   "CN",
+   "TW",
+   "HK",
+   "MX",
+   "BR",
+   "AR",
+   "CL",
+   "CO",
+   "PE"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 1
+   },
+   "app": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
+    "base": 1,
+    "max": 5
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "CN",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "description": "Results wanted (default 50, at most 200). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "app": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^\\d{5,12}$",
+      "description": "The app's App Store id: the number in its link (`…/id426826309`)."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/(?:apps|itunes)\\.apple\\.com\\/[^?#]*\\/id\\d{5,12}(?:[/?#].*)?$",
+      "description": "The app's App Store link, instead of `id`."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "CN",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^\\d{5,12}$",
+      "description": "The app's App Store id: the number in its link (`…/id426826309`)."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/(?:apps|itunes)\\.apple\\.com\\/[^?#]*\\/id\\d{5,12}(?:[/?#].*)?$",
+      "description": "The app's App Store link, instead of `id`."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "CN",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest",
+       "highest",
+       "lowest"
+      ],
+      "description": "Review order."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "baidu",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "CN"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "An image URL: a reverse-image search instead of `q` (`type=image`)."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos",
+       "image"
+      ],
+      "description": "What to search: web results (default), news, images, videos or `image` for a reverse-image search."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CN"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results wanted (default 10, at most 50). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CN"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "bing",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "DE",
+   "FR",
+   "IT",
+   "AT",
+   "JP",
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "An image URL: a reverse-image search instead of `q` (`type=image`)."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos",
+       "image"
+      ],
+      "description": "What to search: web results (default), news, images, videos or `image` for a reverse-image search."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "DE",
+       "FR",
+       "IT",
+       "AT",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "safe": {
+      "type": "string",
+      "enum": [
+       "on",
+       "off"
+      ],
+      "description": "Safe search."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results wanted (default 10, at most 50). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "DE",
+       "FR",
+       "IT",
+       "AT",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "chatgpt",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US",
+   "DE",
+   "GB",
+   "AT",
+   "KR",
+   "AU",
+   "JP",
+   "CA",
+   "FR",
+   "IT"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "conversation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "photos": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "Up to four photos to ask about: https URLs, or `data:image/…;base64,` URLs."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "daum",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 240,
+      "description": "Results wanted (default 10, at most 240). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "duckduckgo",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "IN",
+   "DE",
+   "FR",
+   "IT",
+   "ES",
+   "NL",
+   "BR",
+   "MX",
+   "JP",
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 10
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "IN",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BR",
+       "MX",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "safe": {
+      "type": "string",
+      "enum": [
+       "on",
+       "off"
+      ],
+      "description": "Safe search."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 10, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "IN",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BR",
+       "MX",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "gemini",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US",
+   "DE",
+   "GB",
+   "AT",
+   "KR",
+   "AU",
+   "JP",
+   "CA",
+   "FR",
+   "IT"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "conversation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions",
+   "places",
+   "place"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "DE",
+   "FR",
+   "IT",
+   "AT",
+   "JP",
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   },
+   "places": {
+    "base": 1,
+    "max": 3
+   },
+   "place": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "An image URL: a reverse-image search instead of `q` (`type=image`)."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos",
+       "image"
+      ],
+      "description": "What to search: web results (default), news, images, videos or `image` for a reverse-image search."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "DE",
+       "FR",
+       "IT",
+       "AT",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "safe": {
+      "type": "string",
+      "enum": [
+       "on",
+       "off"
+      ],
+      "description": "Safe search."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Results wanted (default 10, at most 50). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "DE",
+       "FR",
+       "IT",
+       "AT",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "places": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "location": {
+      "type": "string",
+      "pattern": "^-?\\d{1,2}(\\.\\d+)?,-?\\d{1,3}(\\.\\d+)?$",
+      "description": "Search as if from this point: `lat,lng`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Search around this place name, or a `lat,lng` point."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "DE",
+       "FR",
+       "IT",
+       "AT",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 60,
+      "description": "Results wanted (default 20, at most 60). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "place": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "0x[0-9a-f]{1,16}:0x[0-9a-f]{1,16}",
+      "description": "The place's id, as `places` returns it."
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "0x[0-9a-f]{1,16}:0x[0-9a-f]{1,16}",
+      "description": "A Google Maps place URL."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google-ai-mode",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "language": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+      "description": "The language to answer in, as a language tag (`en`, `ko-KR`)."
+     },
+     "conversation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google-aio",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "language": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$",
+      "description": "The language to answer in, as a language tag (`en`, `ko-KR`)."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google-play",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "app",
+   "reviews"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "NZ",
+   "IE",
+   "DE",
+   "FR",
+   "IT",
+   "ES",
+   "NL",
+   "BE",
+   "AT",
+   "CH",
+   "SE",
+   "NO",
+   "DK",
+   "FI",
+   "PL",
+   "PT",
+   "CZ",
+   "GR",
+   "HU",
+   "RO",
+   "TR",
+   "UA",
+   "IL",
+   "AE",
+   "SA",
+   "EG",
+   "ZA",
+   "NG",
+   "KE",
+   "IN",
+   "PK",
+   "ID",
+   "MY",
+   "SG",
+   "TH",
+   "VN",
+   "PH",
+   "JP",
+   "KR",
+   "TW",
+   "HK",
+   "MX",
+   "BR",
+   "AR",
+   "CL",
+   "CO",
+   "PE"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 1
+   },
+   "app": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 30,
+      "description": "Results wanted (default 30, at most 30). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "app": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z0-9_]+)+$",
+      "description": "The app's Play id: its package name (`com.strava`)."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?(?:.*&)?id=[A-Za-z][A-Za-z0-9_.]*(?:[&#].*)?$",
+      "description": "The app's Play link, instead of `id`."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z0-9_]+)+$",
+      "description": "The app's Play id: its package name (`com.strava`)."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?(?:.*&)?id=[A-Za-z][A-Za-z0-9_.]*(?:[&#].*)?$",
+      "description": "The app's Play link, instead of `id`."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BE",
+       "AT",
+       "CH",
+       "SE",
+       "NO",
+       "DK",
+       "FI",
+       "PL",
+       "PT",
+       "CZ",
+       "GR",
+       "HU",
+       "RO",
+       "TR",
+       "UA",
+       "IL",
+       "AE",
+       "SA",
+       "EG",
+       "ZA",
+       "NG",
+       "KE",
+       "IN",
+       "PK",
+       "ID",
+       "MY",
+       "SG",
+       "TH",
+       "VN",
+       "PH",
+       "JP",
+       "KR",
+       "TW",
+       "HK",
+       "MX",
+       "BR",
+       "AR",
+       "CL",
+       "CO",
+       "PE"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest",
+       "highest",
+       "lowest"
+      ],
+      "description": "Review order."
+     },
+     "rating": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Only reviews with this many stars (1-5)."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "phone",
+       "tablet",
+       "watch",
+       "chromebook",
+       "tv",
+       "car"
+      ],
+      "description": "Reviews written on this kind of device (default phone)."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "description": "Results wanted (default 40, at most 200). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google-shopping",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "product",
+   "reviews"
+  ],
+  "includes": [
+   "facets",
+   "offers"
+  ],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 1
+   },
+   "product": {
+    "base": 1,
+    "max": 21
+   },
+   "reviews": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400,
+      "description": "Keywords to search for."
+     },
+     "priceMin": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Lowest price, in the market's currency (decimal major units)."
+     },
+     "priceMax": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Highest price, in the market's currency (decimal major units)."
+     },
+     "facets": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string",
+             "minLength": 1
+            },
+            "value": {
+             "type": "string",
+             "minLength": 1
+            }
+           },
+           "required": [
+            "name",
+            "value"
+           ],
+           "additionalProperties": false
+          }
+         ]
+        }
+       }
+      ],
+      "description": "One value from a result's `facets` (include=facets), e.g. facets=Brand:<value>. Google applies one at a time."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "`facets` — the filter rail Google shows beside the results, on the same page (no extra request)."
+     },
+     "region": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU"
+      ],
+      "description": "The market, ISO 3166-1 alpha-2: US (default), GB, CA, AU. Sets the shops, prices and currency."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "Next page: pass the previous result's `cursor` alone."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "product": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^(?:\\d{6,24}|c\\d{6,24}|p\\d{6,24}(?:-\\d{6,24})?)$",
+      "description": "The product, as a search item's `id` carries it."
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "A Google Shopping product link instead of `id` (the `url` a search item carries)."
+     },
+     "include": {
+      "type": "string",
+      "description": "`offers` · `offers:5` · `offers:all` — every merchant selling the product, 10 per request after the 3 the page shows. Depth counts requests and each is charged; `all` walks to the end, capped at 20."
+     },
+     "region": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU"
+      ],
+      "description": "The market, ISO 3166-1 alpha-2: US (default), GB, CA, AU. Sets the shops, prices and currency."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^(?:\\d{6,24}|c\\d{6,24}|p\\d{6,24}(?:-\\d{6,24})?)$",
+      "description": "The product, as a search item's `id` carries it."
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "A Google Shopping product link instead of `id` (the `url` a search item carries)."
+     },
+     "cursor": {
+      "type": "string",
+      "description": "Next page: pass the previous result's `cursor` alone."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "google-trends",
+  "kind": "serp",
+  "operations": [
+   "explore",
+   "trending"
+  ],
+  "includes": [
+   "articles"
+  ],
+  "regions": [
+   "US",
+   "AD",
+   "AE",
+   "AF",
+   "AG",
+   "AI",
+   "AL",
+   "AM",
+   "AO",
+   "AQ",
+   "AR",
+   "AS",
+   "AT",
+   "AU",
+   "AW",
+   "AX",
+   "AZ",
+   "BA",
+   "BB",
+   "BD",
+   "BE",
+   "BF",
+   "BG",
+   "BH",
+   "BI",
+   "BJ",
+   "BL",
+   "BM",
+   "BN",
+   "BO",
+   "BQ",
+   "BR",
+   "BS",
+   "BT",
+   "BV",
+   "BW",
+   "BY",
+   "BZ",
+   "CA",
+   "CC",
+   "CD",
+   "CF",
+   "CG",
+   "CH",
+   "CI",
+   "CK",
+   "CL",
+   "CM",
+   "CN",
+   "CO",
+   "CR",
+   "CU",
+   "CV",
+   "CW",
+   "CX",
+   "CY",
+   "CZ",
+   "DE",
+   "DJ",
+   "DK",
+   "DM",
+   "DO",
+   "DZ",
+   "EC",
+   "EE",
+   "EG",
+   "EH",
+   "ER",
+   "ES",
+   "ET",
+   "FI",
+   "FJ",
+   "FK",
+   "FM",
+   "FO",
+   "FR",
+   "GA",
+   "GB",
+   "GD",
+   "GE",
+   "GF",
+   "GG",
+   "GH",
+   "GI",
+   "GL",
+   "GM",
+   "GN",
+   "GP",
+   "GQ",
+   "GR",
+   "GS",
+   "GT",
+   "GU",
+   "GW",
+   "GY",
+   "HK",
+   "HM",
+   "HN",
+   "HR",
+   "HT",
+   "HU",
+   "ID",
+   "IE",
+   "IL",
+   "IM",
+   "IN",
+   "IO",
+   "IQ",
+   "IR",
+   "IS",
+   "IT",
+   "JE",
+   "JM",
+   "JO",
+   "JP",
+   "KE",
+   "KG",
+   "KH",
+   "KI",
+   "KM",
+   "KN",
+   "KP",
+   "KR",
+   "KW",
+   "KY",
+   "KZ",
+   "LA",
+   "LB",
+   "LC",
+   "LI",
+   "LK",
+   "LR",
+   "LS",
+   "LT",
+   "LU",
+   "LV",
+   "LY",
+   "MA",
+   "MC",
+   "MD",
+   "ME",
+   "MF",
+   "MG",
+   "MH",
+   "MK",
+   "ML",
+   "MM",
+   "MN",
+   "MO",
+   "MP",
+   "MQ",
+   "MR",
+   "MS",
+   "MT",
+   "MU",
+   "MV",
+   "MW",
+   "MX",
+   "MY",
+   "MZ",
+   "NA",
+   "NC",
+   "NE",
+   "NF",
+   "NG",
+   "NI",
+   "NL",
+   "NO",
+   "NP",
+   "NR",
+   "NU",
+   "NZ",
+   "OM",
+   "PA",
+   "PE",
+   "PF",
+   "PG",
+   "PH",
+   "PK",
+   "PL",
+   "PM",
+   "PN",
+   "PR",
+   "PS",
+   "PT",
+   "PW",
+   "PY",
+   "QA",
+   "RE",
+   "RO",
+   "RS",
+   "RU",
+   "RW",
+   "SA",
+   "SB",
+   "SC",
+   "SD",
+   "SE",
+   "SG",
+   "SH",
+   "SI",
+   "SJ",
+   "SK",
+   "SL",
+   "SM",
+   "SN",
+   "SO",
+   "SR",
+   "SS",
+   "ST",
+   "SV",
+   "SX",
+   "SY",
+   "SZ",
+   "TC",
+   "TD",
+   "TF",
+   "TG",
+   "TH",
+   "TJ",
+   "TK",
+   "TL",
+   "TM",
+   "TN",
+   "TO",
+   "TR",
+   "TT",
+   "TV",
+   "TW",
+   "TZ",
+   "UA",
+   "UG",
+   "UM",
+   "UY",
+   "UZ",
+   "VA",
+   "VC",
+   "VE",
+   "VG",
+   "VI",
+   "VN",
+   "VU",
+   "WF",
+   "WS",
+   "XK",
+   "YE",
+   "YT",
+   "ZA",
+   "ZM",
+   "ZW"
+  ],
+  "parserVersion": 2,
+  "cost": {
+   "explore": {
+    "base": 1,
+    "max": 1
+   },
+   "trending": {
+    "base": 1,
+    "max": 2
+   }
+  },
+  "params": {
+   "explore": {
+    "type": "object",
+    "properties": {
+     "terms": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 520,
+      "description": "Up to five search terms to compare, separated by commas."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "AD",
+       "AE",
+       "AF",
+       "AG",
+       "AI",
+       "AL",
+       "AM",
+       "AO",
+       "AQ",
+       "AR",
+       "AS",
+       "AT",
+       "AU",
+       "AW",
+       "AX",
+       "AZ",
+       "BA",
+       "BB",
+       "BD",
+       "BE",
+       "BF",
+       "BG",
+       "BH",
+       "BI",
+       "BJ",
+       "BL",
+       "BM",
+       "BN",
+       "BO",
+       "BQ",
+       "BR",
+       "BS",
+       "BT",
+       "BV",
+       "BW",
+       "BY",
+       "BZ",
+       "CA",
+       "CC",
+       "CD",
+       "CF",
+       "CG",
+       "CH",
+       "CI",
+       "CK",
+       "CL",
+       "CM",
+       "CN",
+       "CO",
+       "CR",
+       "CU",
+       "CV",
+       "CW",
+       "CX",
+       "CY",
+       "CZ",
+       "DE",
+       "DJ",
+       "DK",
+       "DM",
+       "DO",
+       "DZ",
+       "EC",
+       "EE",
+       "EG",
+       "EH",
+       "ER",
+       "ES",
+       "ET",
+       "FI",
+       "FJ",
+       "FK",
+       "FM",
+       "FO",
+       "FR",
+       "GA",
+       "GB",
+       "GD",
+       "GE",
+       "GF",
+       "GG",
+       "GH",
+       "GI",
+       "GL",
+       "GM",
+       "GN",
+       "GP",
+       "GQ",
+       "GR",
+       "GS",
+       "GT",
+       "GU",
+       "GW",
+       "GY",
+       "HK",
+       "HM",
+       "HN",
+       "HR",
+       "HT",
+       "HU",
+       "ID",
+       "IE",
+       "IL",
+       "IM",
+       "IN",
+       "IO",
+       "IQ",
+       "IR",
+       "IS",
+       "IT",
+       "JE",
+       "JM",
+       "JO",
+       "JP",
+       "KE",
+       "KG",
+       "KH",
+       "KI",
+       "KM",
+       "KN",
+       "KP",
+       "KR",
+       "KW",
+       "KY",
+       "KZ",
+       "LA",
+       "LB",
+       "LC",
+       "LI",
+       "LK",
+       "LR",
+       "LS",
+       "LT",
+       "LU",
+       "LV",
+       "LY",
+       "MA",
+       "MC",
+       "MD",
+       "ME",
+       "MF",
+       "MG",
+       "MH",
+       "MK",
+       "ML",
+       "MM",
+       "MN",
+       "MO",
+       "MP",
+       "MQ",
+       "MR",
+       "MS",
+       "MT",
+       "MU",
+       "MV",
+       "MW",
+       "MX",
+       "MY",
+       "MZ",
+       "NA",
+       "NC",
+       "NE",
+       "NF",
+       "NG",
+       "NI",
+       "NL",
+       "NO",
+       "NP",
+       "NR",
+       "NU",
+       "NZ",
+       "OM",
+       "PA",
+       "PE",
+       "PF",
+       "PG",
+       "PH",
+       "PK",
+       "PL",
+       "PM",
+       "PN",
+       "PR",
+       "PS",
+       "PT",
+       "PW",
+       "PY",
+       "QA",
+       "RE",
+       "RO",
+       "RS",
+       "RU",
+       "RW",
+       "SA",
+       "SB",
+       "SC",
+       "SD",
+       "SE",
+       "SG",
+       "SH",
+       "SI",
+       "SJ",
+       "SK",
+       "SL",
+       "SM",
+       "SN",
+       "SO",
+       "SR",
+       "SS",
+       "ST",
+       "SV",
+       "SX",
+       "SY",
+       "SZ",
+       "TC",
+       "TD",
+       "TF",
+       "TG",
+       "TH",
+       "TJ",
+       "TK",
+       "TL",
+       "TM",
+       "TN",
+       "TO",
+       "TR",
+       "TT",
+       "TV",
+       "TW",
+       "TZ",
+       "UA",
+       "UG",
+       "UM",
+       "US",
+       "UY",
+       "UZ",
+       "VA",
+       "VC",
+       "VE",
+       "VG",
+       "VI",
+       "VN",
+       "VU",
+       "WF",
+       "WS",
+       "XK",
+       "YE",
+       "YT",
+       "ZA",
+       "ZM",
+       "ZW"
+      ],
+      "description": "The country, as an ISO 3166 code. Absent: worldwide."
+     },
+     "subregion": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}(?:-\\d{3})?$",
+      "description": "A state, province or US metro inside `country` (`US-CA`, `US-CA-807`), instead of the whole country."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "4hours",
+       "day",
+       "week",
+       "month",
+       "quarter",
+       "year",
+       "5years",
+       "all"
+      ],
+      "description": "The period: the past hour, 4 hours, day, week (7 days), month, quarter (3 months), year (12 months, the default), 5 years, or `all` (since 2004)."
+     },
+     "from": {
+      "type": "string",
+      "description": "A custom period's first day (`YYYY-MM-DD`), or hour within the past week (`YYYY-MM-DDTHH`), with `to`."
+     },
+     "to": {
+      "type": "string",
+      "description": "A custom period's last day (`YYYY-MM-DD`) or hour (`YYYY-MM-DDTHH`), with `from`."
+     },
+     "category": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "A Trends category id, to measure the terms within it (0 = all categories)."
+     },
+     "property": {
+      "type": "string",
+      "enum": [
+       "web",
+       "images",
+       "news",
+       "shopping",
+       "youtube"
+      ],
+      "description": "Which Google search: web (default), images, news, shopping or youtube."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language: the language of topic names and labels (`en`, `pt-BR`)."
+     },
+     "resolution": {
+      "type": "string",
+      "enum": [
+       "country",
+       "region",
+       "metro",
+       "city"
+      ],
+      "description": "Interest by region by country, region, metro (US only) or city. Default: the next level below the place asked."
+     },
+     "lowVolume": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "true",
+         "false"
+        ]
+       },
+       {
+        "type": "boolean"
+       }
+      ],
+      "description": "Include regions with low search volume in interest by region."
+     }
+    },
+    "required": [
+     "terms"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "trending": {
+    "type": "object",
+    "properties": {
+     "country": {
+      "type": "string",
+      "enum": [
+       "AE",
+       "AL",
+       "AM",
+       "AO",
+       "AR",
+       "AT",
+       "AU",
+       "AZ",
+       "BA",
+       "BD",
+       "BE",
+       "BF",
+       "BG",
+       "BH",
+       "BJ",
+       "BO",
+       "BR",
+       "BY",
+       "CA",
+       "CD",
+       "CH",
+       "CI",
+       "CL",
+       "CM",
+       "CO",
+       "CR",
+       "CU",
+       "CY",
+       "CZ",
+       "DE",
+       "DK",
+       "DO",
+       "DZ",
+       "EC",
+       "EE",
+       "EG",
+       "ES",
+       "ET",
+       "FI",
+       "FR",
+       "GB",
+       "GE",
+       "GH",
+       "GR",
+       "GT",
+       "HK",
+       "HN",
+       "HR",
+       "HT",
+       "HU",
+       "ID",
+       "IE",
+       "IL",
+       "IN",
+       "IQ",
+       "IR",
+       "IT",
+       "JM",
+       "JO",
+       "JP",
+       "KE",
+       "KG",
+       "KH",
+       "KR",
+       "KW",
+       "KZ",
+       "LB",
+       "LK",
+       "LT",
+       "LV",
+       "LY",
+       "MA",
+       "MD",
+       "MK",
+       "ML",
+       "MM",
+       "MX",
+       "MY",
+       "MZ",
+       "NG",
+       "NI",
+       "NL",
+       "NO",
+       "NP",
+       "NZ",
+       "OM",
+       "PA",
+       "PE",
+       "PH",
+       "PK",
+       "PL",
+       "PR",
+       "PS",
+       "PT",
+       "PY",
+       "QA",
+       "RO",
+       "RS",
+       "RU",
+       "SA",
+       "SE",
+       "SG",
+       "SI",
+       "SK",
+       "SN",
+       "SV",
+       "SY",
+       "TH",
+       "TM",
+       "TN",
+       "TR",
+       "TT",
+       "TW",
+       "TZ",
+       "UA",
+       "UG",
+       "US",
+       "UY",
+       "UZ",
+       "VE",
+       "VN",
+       "YE",
+       "ZA",
+       "ZM",
+       "ZW"
+      ],
+      "description": "The country, as an ISO 3166 code."
+     },
+     "subregion": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-[A-Z0-9]{1,3}(?:-\\d{3})?$",
+      "description": "A state or province inside `country` (`US-CA`)."
+     },
+     "window": {
+      "type": "string",
+      "enum": [
+       "4h",
+       "24h",
+       "48h",
+       "7d"
+      ],
+      "description": "The period: past 4 hours, 24 hours (default), 48 hours or 7 days."
+     },
+     "category": {
+      "type": "integer",
+      "description": "Only trends in this category (trending now's own 1-20; 0 = all)."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language: the language of topic names and labels (`en`, `pt-BR`)."
+     },
+     "include": {
+      "type": "string",
+      "enum": [
+       "articles"
+      ],
+      "description": "`articles`: every news article Trends holds for each trend, for the first 300 trends (charged as one more unit)."
+     }
+    },
+    "required": [
+     "country"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "instagram",
   "kind": "sns",
   "operations": [
@@ -1103,6 +3851,355 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "naver",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions",
+   "places",
+   "place",
+   "reviews"
+  ],
+  "includes": [],
+  "regions": [
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   },
+   "places": {
+    "base": 1,
+    "max": 1
+   },
+   "place": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
+    "base": 1,
+    "max": 10
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 10, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "places": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "maps"
+      ],
+      "description": "The map's place list (the only one Naver has)."
+     },
+     "location": {
+      "type": "string",
+      "pattern": "^-?\\d{1,2}(\\.\\d+)?,-?\\d{1,3}(\\.\\d+)?$",
+      "description": "Search as if from this point: `lat,lng`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Search around this place name, or a `lat,lng` point."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "place": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^\\d{4,20}$",
+      "description": "The place's id, as `places` returns it."
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "(?:map\\.naver\\.com\\/(?:p|v5)\\/(?:entry\\/place|search\\/[^/?]+\\/place)|pcmap\\.place\\.naver\\.com\\/[a-z]+|m\\.place\\.naver\\.com\\/[a-z]+|naver\\.me)\\/(\\d{4,20})",
+      "description": "A Naver Map place URL."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "place": {
+      "type": "string",
+      "pattern": "^\\d{4,20}$",
+      "description": "The place's id, as `places` returns it."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest"
+      ],
+      "description": "Review order: Naver's recommended order (default) or newest first."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 10, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "naver-ai-brief",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "KR"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "naver-ai-tab",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "KR"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "conversation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "reddit",
   "kind": "sns",
   "operations": [
@@ -1412,6 +4509,114 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "seznam",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "CZ"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CZ"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 10, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CZ"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "shopify",
   "kind": "marketplace",
   "operations": [
@@ -1694,6 +4899,114 @@ const snapshot: unknown = [
     },
     "required": [
      "id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "sogou",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "CN"
+  ],
+  "parserVersion": 4,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 10
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CN"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "The page each tab is served as, and the only value it takes: mobile for web and news, desktop for images and videos."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default one page: 7-10 on web, 10 news, 48 images; at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "CN"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
@@ -2316,6 +5629,223 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "tripadvisor",
+  "kind": "serp",
+  "operations": [
+   "places",
+   "place",
+   "reviews"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "IN",
+   "IE",
+   "DE",
+   "FR",
+   "IT",
+   "ES",
+   "NL",
+   "BR",
+   "MX",
+   "JP",
+   "KR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "places": {
+    "base": 1,
+    "max": 4
+   },
+   "place": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
+    "base": 1,
+    "max": 5
+   }
+  },
+  "params": {
+   "places": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "all",
+       "restaurants",
+       "hotels",
+       "attractions",
+       "tours",
+       "destinations",
+       "airlines"
+      ],
+      "description": "What to list: everything (default), restaurants, hotels, attractions (things to do, tours included), tours, destinations or airlines."
+     },
+     "location": {
+      "type": "string",
+      "pattern": "^-?\\d{1,2}(\\.\\d+)?,-?\\d{1,3}(\\.\\d+)?$",
+      "description": "Search as if from this point: `lat,lng`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Search around this place name, or a `lat,lng` point."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "IN",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BR",
+       "MX",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120,
+      "description": "Results wanted (default 30, at most 120). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "place": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "description": "The place's id, as `places` returns it (a Tripadvisor link is taken too)."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "tripadvisor\\.[a-z.]+\\/[A-Za-z_]+-g(\\d{1,12})(?:-d(\\d{3,12}))?(?:[-.])",
+      "description": "A Tripadvisor place link."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "IN",
+       "IE",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "NL",
+       "BR",
+       "MX",
+       "JP",
+       "KR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "place": {
+      "type": "string",
+      "description": "The place's id, as `places` returns it (a Tripadvisor link is taken too)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest",
+       "detailed"
+      ],
+      "description": "Review order: Tripadvisor's own (default), newest first, or the most detailed first."
+     },
+     "rating": {
+      "type": "string",
+      "pattern": "^[1-5](,[1-5])*$",
+      "description": "Only reviews with these stars, e.g. `5` or `1,2`."
+     },
+     "visitType": {
+      "type": "string",
+      "pattern": "^(families|couples|solo|business|friends)(,(families|couples|solo|business|friends))*$",
+      "description": "Only reviews by these travellers: families, couples, solo, business, friends (comma-separated)."
+     },
+     "months": {
+      "type": "string",
+      "pattern": "^((1[0-2]|[1-9])|january|february|march|april|may|june|july|august|september|october|november|december)(,((1[0-2]|[1-9])|january|february|march|april|may|june|july|august|september|october|november|december))*$",
+      "description": "Only reviews of visits in these months, e.g. `6,7,8` or `june`."
+     },
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "Only reviews that mention this text."
+     },
+     "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}$",
+      "description": "Only reviews in this language — Tripadvisor counts its machine translations into it (each review says when it is one). All languages by default."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "walmart",
   "kind": "marketplace",
   "operations": [
@@ -2709,6 +6239,529 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Numeric community id, or the community URL (x.com/i/communities/<id>)."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "yahoo",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "DE",
+   "FR",
+   "IT",
+   "ES",
+   "IN",
+   "SG",
+   "PH",
+   "BR",
+   "MX",
+   "AR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 9
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "IN",
+       "SG",
+       "PH",
+       "BR",
+       "MX",
+       "AR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "safe": {
+      "type": "string",
+      "enum": [
+       "on",
+       "off"
+      ],
+      "description": "Safe search."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 60,
+      "description": "Results wanted (default 7, at most 60). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "DE",
+       "FR",
+       "IT",
+       "ES",
+       "IN",
+       "SG",
+       "PH",
+       "BR",
+       "MX",
+       "AR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "yahoo-japan",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "JP"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 10
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "JP"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 10, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "JP"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "yandex",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions",
+   "places",
+   "place",
+   "reviews"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "RU",
+   "TR",
+   "KZ",
+   "BY",
+   "UA",
+   "UZ",
+   "DE",
+   "GB",
+   "FR"
+  ],
+  "parserVersion": 3,
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 5
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   },
+   "places": {
+    "base": 1,
+    "max": 4
+   },
+   "place": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
+    "base": 1,
+    "max": 4
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "An image URL: a reverse-image search instead of `q` (`type=image`)."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "news",
+       "images",
+       "videos",
+       "image"
+      ],
+      "description": "What to search: news, images, videos, or `image` for a reverse-image search. Yandex's web results are not offered."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "RU",
+       "TR",
+       "KZ",
+       "BY",
+       "UA",
+       "UZ",
+       "DE",
+       "GB",
+       "FR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "ru"
+      ],
+      "description": "Interface language: en (yandex.com, the default) or ru (yandex.ru)."
+     },
+     "device": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which page to read: the desktop (default) or the mobile one."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "RU",
+       "TR",
+       "KZ",
+       "BY",
+       "UA",
+       "UZ",
+       "DE",
+       "GB",
+       "FR"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "enum": [
+       "en",
+       "ru"
+      ],
+      "description": "Interface language: en (yandex.com, the default) or ru (yandex.ru)."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "places": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "maps"
+      ],
+      "description": "The map's list of places (the only one Yandex has)."
+     },
+     "location": {
+      "type": "string",
+      "pattern": "^-?\\d{1,2}(\\.\\d+)?,-?\\d{1,3}(\\.\\d+)?$",
+      "description": "Search as if from this point: `lat,lng`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Search around this place name, or a `lat,lng` point."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "place": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "pattern": "^\\d{5,20}$",
+      "description": "The place's id, as `places` returns it."
+     },
+     "url": {
+      "type": "string",
+      "pattern": "(?:yandex\\.[a-z.]+\\/maps\\/org\\/(?:[^/?#]+\\/)?|ymapsbm1:\\/\\/org\\?oid=)(\\d{5,20})",
+      "description": "A Yandex Maps organisation link."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "place": {
+      "type": "string",
+      "pattern": "^\\d{5,20}$",
+      "description": "The place's id, as `places` returns it."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest",
+       "highest",
+       "lowest"
+      ],
+      "description": "Review order."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "description": "Results wanted (default 50, at most 200). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
      }
     },
     "additionalProperties": false,

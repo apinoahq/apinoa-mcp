@@ -64,7 +64,10 @@ const types = Object.keys(schemas)
     const s = schemas[n];
     const body = ts(s, 0);
     const doc = s.description ? `/** ${s.description.replace(/\s+/g, " ").slice(0, 200)} */\n` : "";
-    return body.startsWith("{") ? `${doc}interface ${n} ${body}` : `${doc}type ${n} = ${body};`;
+    // Only a schema that is one object can be an interface: a union of objects, or an array of them, also starts
+    // with "{".
+    const single = body.startsWith("{") && s.type === "object" && !(s.anyOf || s.oneOf || s.allOf);
+    return single ? `${doc}interface ${n} ${body}` : `${doc}type ${n} = ${body};`;
   })
   .join("\n");
 
