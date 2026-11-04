@@ -13,7 +13,7 @@ export interface ApiOptions {
 
 export interface CatalogEntry {
   id: string;
-  kind: "marketplace" | "sns";
+  kind: "marketplace" | "sns" | "serp" | "answers";
   operations: string[];
   regions?: string[];
   cost?: Record<string, { base: number; max: number }>;

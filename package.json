@@ -1,7 +1,7 @@
 {
   "name": "apinoa-mcp",
-  "version": "0.2.4",
-  "description": "MCP server for apinoa: marketplace and social data for Claude, Cursor and any MCP client. Code mode: the model writes TypeScript against a typed client, run in a sandbox.",
+  "version": "0.2.5",
+  "description": "MCP server for apinoa: marketplace products, social posts, search results and AI answers (Amazon, TikTok, Google, ChatGPT and more) for Claude Code, Codex, Cursor and any MCP client. Code mode: the model writes TypeScript against a typed client, run in a sandbox.",
   "license": "MIT",
   "homepage": "https://apinoa.com/docs",
   "repository": {
@@ -20,7 +20,25 @@
     "tiktok",
     "instagram",
     "reddit",
-    "youtube"
+    "youtube",
+    "serp",
+    "search-api",
+    "google",
+    "bing",
+    "naver",
+    "ai-answers",
+    "chatgpt",
+    "gemini",
+    "ai-overviews",
+    "tiktokshop",
+    "x",
+    "threads",
+    "linkedin",
+    "social-media",
+    "web-scraping",
+    "claude-code",
+    "codex",
+    "cursor"
   ],
   "type": "module",
   "bin": {

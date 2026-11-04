@@ -182,3 +182,26 @@ test("without a catalog the live one is read, and when it cannot be, the bundled
   const search = (await b.listTools()).tools.find((t) => t.name === "search_products");
   assert.ok(search.inputSchema.properties.platform.enum.includes("amazon"), "snapshot platforms");
 });
+
+test("the server introduces itself by the sources it serves, in both modes", async () => {
+  const catalog = [
+    ...CATALOG,
+    { id: "google", kind: "serp", operations: ["search"], params: { search: { properties: { q: {} } } } },
+    { id: "bing", kind: "serp", operations: ["search"], params: { search: { properties: { q: {} } } } },
+    { id: "seznam", kind: "serp", operations: ["search"], params: { search: { properties: { q: {} } } } },
+    { id: "chatgpt", kind: "answers", operations: ["answer"], params: { answer: { properties: { prompt: {} }, required: ["prompt"] } } },
+  ];
+  for (const mode of ["tools", "code"]) {
+    const client = await connect({ mode, catalog, fetch: fakeFetch({}) });
+    const text = client.getInstructions();
+    assert.match(text, /^apinoa returns live web data as JSON: Amazon and Walmart products/, mode);
+    assert.match(text, /TikTok posts, profiles and comments/, mode);
+    assert.match(text, /search results from Google, Bing and 1 more search engines/, mode);
+    assert.match(text, /what ChatGPT answers to a prompt/, mode);
+    assert.match(text, /instead of writing a scraper/, mode);
+    assert.doesNotMatch(text, /eBay/, mode);
+    assert.ok(text.length < 4096, "Claude Code reads the first 4,096 characters");
+    assert.match(text, mode === "code" ? /search_docs/ : /call_apinoa/, mode);
+    await client.close();
+  }
+});

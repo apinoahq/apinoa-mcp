@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.5
+
+- The server's instructions now name every source it serves, built from the catalog: marketplace products, social posts, search results from 16 search engines and answers from six AI answer engines. Tools mode sends instructions too; before, only code mode did.
+- `call_apinoa` says it reaches search results and AI answers.
+- The README adds Codex setup (`codex mcp add`) and examples for search rankings and AI answers.
+
 ## 0.2.4
 
 Code mode's types and the bundled catalog follow the API as of 2026-10-30:

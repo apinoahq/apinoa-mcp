@@ -70,13 +70,15 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
 
   const server = new McpServer(
     { name: "apinoa", version: VERSION },
-    mode === "code"
-      ? {
-          instructions:
-            "apinoa reads marketplaces (Amazon, Walmart, Shopify, TikTok Shop, AliExpress) and social platforms (TikTok, YouTube, Instagram, Threads, X, Reddit, LinkedIn). " +
-            "Find the operations and fields with search_docs, then call them from TypeScript in execute: fan out, page, filter and aggregate in the code, and return only the result.",
-        }
-      : undefined,
+    {
+      instructions:
+        about(catalog) +
+        (mode === "code"
+          ? " Find the operations and fields with search_docs, then call them from TypeScript in execute: fan out, page, filter and aggregate in the code, and return only the result."
+          : " Products: search_products, get_product, get_product_reviews, list_categories, browse_category. Social: get_social_profile, list_social_posts, get_social_post, get_social_comments. " +
+            "Search results and AI answers: call_apinoa with a platform (google, bing, naver, chatgpt, gemini…) and its operation (search, answer…); list_platforms lists every operation and its parameters. " +
+            "translate_image translates the text in a product photo."),
+    },
   );
   const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
 
@@ -121,6 +123,41 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
   );
 
   return server;
+}
+
+/** Display names for the sources the server introduces itself with; an id without one is shown as it is. */
+const NAMES: Record<string, string> = {
+  amazon: "Amazon", walmart: "Walmart", shopify: "Shopify", tiktokshop: "TikTok Shop", aliexpress: "AliExpress", ebay: "eBay",
+  tiktok: "TikTok", instagram: "Instagram", youtube: "YouTube", reddit: "Reddit", x: "X", threads: "Threads", linkedin: "LinkedIn",
+  google: "Google", bing: "Bing", naver: "Naver", baidu: "Baidu", yandex: "Yandex", yahoo: "Yahoo",
+  chatgpt: "ChatGPT", gemini: "Gemini", "google-aio": "Google AI Overviews", "google-ai-mode": "Google AI Mode",
+  "naver-ai-brief": "Naver AI Briefing", "naver-ai-tab": "Naver AI Tab",
+};
+const SNS = new Set(["tiktok", "instagram", "youtube", "reddit", "x", "threads", "linkedin"]);
+const ORDER = Object.keys(NAMES);
+const byOrder = (a: string, b: string) => (ORDER.indexOf(a) + 1 || 999) - (ORDER.indexOf(b) + 1 || 999);
+const list = (ids: string[]) => {
+  const names = ids.sort(byOrder).map((id) => NAMES[id] ?? id);
+  return names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names.join("");
+};
+
+/**
+ * The first thing a client reads about the server, so it names what a developer would type — the sources, by
+ * name — before any tool. Built from the catalog the server serves, so a source appears here when it is served
+ * and not before.
+ */
+export function about(catalog: CatalogEntry[]): string {
+  const kind = (e: CatalogEntry) => (e as { kind?: string }).kind ?? (SNS.has(e.id) ? "sns" : "marketplace");
+  const of = (k: string) => catalog.filter((e) => kind(e) === k).map((e) => e.id);
+  const serp = of("serp");
+  const named = serp.filter((id) => ["google", "bing", "naver", "baidu", "yandex", "yahoo"].includes(id));
+  const parts = [
+    of("marketplace").length && `${list(of("marketplace"))} products, reviews and categories`,
+    of("sns").length && `${list(of("sns"))} posts, profiles and comments`,
+    serp.length && `search results from ${named.sort(byOrder).map((id) => NAMES[id]).join(", ")}${serp.length > named.length ? ` and ${serp.length - named.length} more search engines` : ""}`,
+    of("answers").length && `what ${list(of("answers"))} ${of("answers").length > 1 ? "answer" : "answers"} to a prompt, with the citations`,
+  ].filter(Boolean) as string[];
+  return `apinoa returns live web data as JSON: ${parts.join("; ")}. Use it instead of writing a scraper.`;
 }
 
 const EXAMPLE = `const page = await apinoa.tiktok.posts({ hashtag: "glassskin", limit: 50 });

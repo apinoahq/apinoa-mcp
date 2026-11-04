@@ -234,7 +234,7 @@ export function registerLegacyTools(server: McpServer, api: ApiOptions, catalog:
     {
       title: "Call any apinoa operation",
       description: [
-        "Call any operation of the apinoa API directly, for what the other tools do not cover (store catalogs, shipping quotes, groups, followers, LinkedIn jobs…).",
+        "Call any operation of the apinoa API directly, for what the other tools do not cover: search engine results (google, bing, naver… search), AI answers (chatgpt, gemini, google-aio… answer), store catalogs, shipping quotes, groups, followers, LinkedIn jobs….",
         "Every platform and its operations (params of each are listed by list_platforms):",
         ...catalog.map((e) => `- ${e.id}: ${e.operations.filter((op) => !FILE_OPERATIONS.has(`${e.id}/${op}`)).join(", ")}`),
       ].join("\n"),

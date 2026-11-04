@@ -1,11 +1,15 @@
 # apinoa-mcp
 
-An [MCP](https://modelcontextprotocol.io) server for [apinoa](https://apinoa.com). It gives Claude, Cursor
-and any other MCP client live product data from Amazon, Walmart, Shopify, TikTok Shop and AliExpress,
-social data from TikTok, YouTube, Instagram, Threads, X, Reddit and LinkedIn, and image translation.
+An [MCP](https://modelcontextprotocol.io) server for [apinoa](https://apinoa.com). It gives Claude Code,
+Codex, Cursor and any other MCP client live product data from Amazon, Walmart, Shopify, TikTok Shop and
+AliExpress; posts, profiles and comments from TikTok, YouTube, Instagram, Threads, X, Reddit and LinkedIn;
+search results from Google, Bing, Naver and 13 more search engines; AI answers from ChatGPT, Gemini, Google
+AI Overviews, Google AI Mode and Naver; and image translation. Use it instead of writing a scraper.
 
 Ask things like *"which of @duolingo's last 30 TikToks got 3x its usual views"*, *"compare the cheapest
-Stanley 40 oz on Amazon and Walmart"* or *"translate the text on this product photo into Korean"*.
+Stanley 40 oz on Amazon and Walmart"*, *"where does example.com rank on Google for 'trail running shoes'"*,
+*"does ChatGPT mention our brand when asked for the best running shoes"* or *"translate the text on this
+product photo into Korean"*.
 
 ## Setup
 
@@ -16,6 +20,21 @@ at the API's normal rates; a call that fails is not billed.
 
 ```sh
 claude mcp add apinoa -e APINOA_API_KEY=your_key -- npx -y apinoa-mcp
+```
+
+**Codex**
+
+```sh
+codex mcp add apinoa --env APINOA_API_KEY=your_key -- npx -y apinoa-mcp
+```
+
+or in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.apinoa]
+command = "npx"
+args = ["-y", "apinoa-mcp"]
+env = { APINOA_API_KEY = "your_key" }
 ```
 
 **Claude Desktop, Cursor, Windsurf and others** — add to the client's MCP configuration
