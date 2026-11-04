@@ -16,6 +16,17 @@ product photo into Korean"*.
 Create a key under **Dashboard > API keys** at [apinoa.com](https://apinoa.com). Calls are billed to it
 at the API's normal rates; a call that fails is not billed.
 
+**Get a key from the terminal**
+
+```sh
+npx apinoa-mcp login
+```
+
+It prints a code and opens an apinoa page in your browser, where you sign in and enter the code. The new key is
+saved to `.env` in the current folder as `APINOA_API_KEY` (`--out <path>` writes it to another file,
+`--no-browser` only prints the address). It expires after 90 days and is listed under **Dashboard > API keys**,
+where you can revoke it. Give it to your client as below.
+
 **Claude Code**
 
 ```sh
@@ -109,6 +120,7 @@ characters keeps as many whole items as fit, with a note saying how many were le
 |---|---|---|
 | `APINOA_API_KEY` | — | Required for every data call. |
 | `APINOA_BASE_URL` | `https://gateway.apinoa.com` | |
+| `APINOA_API_URL` | `https://api.apinoa.com` | Where `login` signs in. https only (http for localhost). |
 | `APINOA_MCP_MODE` | `code` | `tools` for the 0.1 tool set. |
 | `APINOA_MCP_DATA_DIR` | `~/.apinoa-mcp` | Where the cache, `store` and saved files live. |
 | `APINOA_MCP_MAX_BUDGET` | `20000` | The most units one run may be given. |

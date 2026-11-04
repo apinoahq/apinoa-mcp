@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.8
+
+- New: `npx apinoa-mcp login` gets an API key from the terminal. It prints an apinoa address and a code, opens the page in your browser, and once you sign in, enter the code and approve, saves the key to `.env` in the current folder as `APINOA_API_KEY` (`--out <path>` for another file, `--no-browser` to only print the address). An existing `APINOA_API_KEY` line is replaced and the rest of the file is kept; a new file is readable by you only. It warns when the file is not ignored by git or other users can read it, and it never prints the full key.
+- A key made this way expires after 90 days. The CLI keeps up to five keys per account, and `login` says when a sign-in revoked the oldest.
+- An account's first key made this way can come with $0.10 of evaluation credit; `login` says so when it does.
+- `APINOA_API_URL` sets where `login` signs in (https only; http for localhost).
+- The server itself is unchanged; without `login` the command starts it as before.
+- The official MCP Registry entry lists the hosted server, `https://api.apinoa.com/mcp`, under `remotes`.
+
 ## 0.2.7
 
 The bundled catalog, which the server falls back on when it cannot read the live one, follows `GET /v1/marketplaces` as of 2026-11-04:

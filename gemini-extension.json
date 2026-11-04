@@ -1,6 +1,6 @@
 {
   "name": "apinoa",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Products, social posts, search results and AI answers from Amazon, TikTok, Google, ChatGPT and more, as tools.",
   "mcpServers": {
     "apinoa": {
