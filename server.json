@@ -39,5 +39,19 @@
         }
       ]
     }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.apinoa.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional. Bearer <your apinoa API key>. Without it, the client signs in with OAuth and gets a key of its own.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
   ]
 }
