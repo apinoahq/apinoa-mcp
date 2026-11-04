@@ -1,0 +1,22 @@
+{
+  "name": "apinoa",
+  "version": "0.2.6",
+  "description": "Products, social posts, search results and AI answers from Amazon, TikTok, Google, ChatGPT and more, as tools.",
+  "mcpServers": {
+    "apinoa": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "apinoa-mcp"
+      ]
+    }
+  },
+  "settings": [
+    {
+      "name": "apinoa API key",
+      "description": "Create one at https://apinoa.com/en/dashboard/api-keys",
+      "envVar": "APINOA_API_KEY",
+      "sensitive": true
+    }
+  ]
+}
