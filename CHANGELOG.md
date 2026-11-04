@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.7
+
+The bundled catalog, which the server falls back on when it cannot read the live one, follows `GET /v1/marketplaces` as of 2026-11-04:
+
+- Walmart `product` takes `seller`, a seller's numeric id, to get that seller's offer.
+- Entries no longer carry `parserVersion`, which the live catalog no longer publishes.
+
 ## 0.2.6
 
 - Listed in the official MCP Registry as `io.github.apinoahq/apinoa-mcp`: `package.json` names the server (`mcpName`), and `server.json` describes it, its npm package and its `APINOA_API_KEY` and `APINOA_MCP_MODE` settings. Each release is published there after npm.

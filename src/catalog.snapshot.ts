@@ -15,7 +15,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 3,
   "cost": {
    "browse": {
     "base": 1,
@@ -287,7 +286,6 @@ const snapshot: unknown = [
    "SG",
    "AU"
   ],
-  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -798,7 +796,6 @@ const snapshot: unknown = [
    "CO",
    "PE"
   ],
-  "parserVersion": 4,
   "cost": {
    "search": {
     "base": 1,
@@ -1095,7 +1092,6 @@ const snapshot: unknown = [
   "regions": [
    "CN"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -1210,7 +1206,6 @@ const snapshot: unknown = [
    "JP",
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -1370,7 +1365,6 @@ const snapshot: unknown = [
    "FR",
    "IT"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -1445,7 +1439,6 @@ const snapshot: unknown = [
   "regions": [
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -1566,7 +1559,6 @@ const snapshot: unknown = [
    "JP",
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -1710,7 +1702,6 @@ const snapshot: unknown = [
    "FR",
    "IT"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -1787,7 +1778,6 @@ const snapshot: unknown = [
    "JP",
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -2025,7 +2015,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -2097,7 +2086,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -2213,7 +2201,6 @@ const snapshot: unknown = [
    "CO",
    "PE"
   ],
-  "parserVersion": 4,
   "cost": {
    "search": {
     "base": 1,
@@ -2532,7 +2519,6 @@ const snapshot: unknown = [
    "CA",
    "AU"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -2951,7 +2937,6 @@ const snapshot: unknown = [
    "ZM",
    "ZW"
   ],
-  "parserVersion": 2,
   "cost": {
    "explore": {
     "base": 1,
@@ -3498,7 +3483,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -3705,7 +3689,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 5,
   "cost": {
    "profile": {
     "base": 1,
@@ -3864,7 +3847,6 @@ const snapshot: unknown = [
   "regions": [
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -4083,7 +4065,6 @@ const snapshot: unknown = [
   "regions": [
    "KR"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -4144,7 +4125,6 @@ const snapshot: unknown = [
   "regions": [
    "KR"
   ],
-  "parserVersion": 4,
   "cost": {
    "answer": {
     "base": 1,
@@ -4215,7 +4195,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -4519,7 +4498,6 @@ const snapshot: unknown = [
   "regions": [
    "CZ"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -4630,7 +4608,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -4916,7 +4893,6 @@ const snapshot: unknown = [
   "regions": [
    "CN"
   ],
-  "parserVersion": 4,
   "cost": {
    "search": {
     "base": 1,
@@ -5026,7 +5002,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -5219,7 +5194,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
@@ -5487,7 +5461,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "search": {
     "base": 1,
@@ -5654,7 +5627,6 @@ const snapshot: unknown = [
    "JP",
    "KR"
   ],
-  "parserVersion": 3,
   "cost": {
    "places": {
     "base": 1,
@@ -5859,7 +5831,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 5,
   "cost": {
    "search": {
     "base": 1,
@@ -6114,6 +6085,11 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "Walmart's `usItemId`, all digits, as carried by a search item — chain straight in."
      },
+     "seller": {
+      "type": "string",
+      "pattern": "^\\d+$",
+      "description": "Walmart's numeric seller id (`seller.ext.catalogSellerId`, or `selectedSellerId` in a Walmart link; `0` is Walmart.com): the product's offer from that seller. A seller that does not sell the item gets Walmart's default offer, so compare the returned `seller.ext.catalogSellerId`."
+     },
      "region": {
       "type": "string",
       "description": "Buyer country as ISO 3166-1 alpha-2; sets availability, shipping and price."
@@ -6160,7 +6136,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 4,
   "cost": {
    "profile": {
     "base": 1,
@@ -6269,7 +6244,6 @@ const snapshot: unknown = [
    "MX",
    "AR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -6409,7 +6383,6 @@ const snapshot: unknown = [
   "regions": [
    "JP"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -6529,7 +6502,6 @@ const snapshot: unknown = [
    "GB",
    "FR"
   ],
-  "parserVersion": 3,
   "cost": {
    "search": {
     "base": 1,
@@ -6784,7 +6756,6 @@ const snapshot: unknown = [
   "regions": [
    "US"
   ],
-  "parserVersion": 6,
   "cost": {
    "profile": {
     "base": 1,
