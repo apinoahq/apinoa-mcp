@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6
+
+- Listed in the official MCP Registry as `io.github.apinoahq/apinoa-mcp`: `package.json` names the server (`mcpName`), and `server.json` describes it, its npm package and its `APINOA_API_KEY` and `APINOA_MCP_MODE` settings. Each release is published there after npm.
+
 ## 0.2.5
 
 - The server's instructions now name every source it serves, built from the catalog: marketplace products, social posts, search results from 16 search engines and answers from six AI answer engines. Tools mode sends instructions too; before, only code mode did.

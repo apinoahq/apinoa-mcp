@@ -1,7 +1,8 @@
 # Publishes to npm every version that is not there yet, on each push to main: the version in package.json is the
 # release, so a push that does not change it publishes nothing. After the upload, the tag and the GitHub Release
-# are made from that version's CHANGELOG section. No token: npm trusted publishing (OIDC) for this repository,
-# this workflow and the `npm` environment, with provenance.
+# are made from that version's CHANGELOG section, and server.json goes to the official MCP Registry. No token:
+# npm trusted publishing (OIDC) for this repository, this workflow and the `npm` environment, with provenance;
+# the registry takes the same repository's OIDC token for the io.github.apinoahq namespace.
 name: publish
 
 on:
@@ -72,3 +73,44 @@ jobs:
         run: |
           awk -v h="## $V" '$0 == h { on = 1; next } /^## / && on { exit } on' CHANGELOG.md > notes.md
           gh release create "v$V" --target "$GITHUB_SHA" --title "v$V" --notes-file notes.md
+
+  # The official MCP Registry lists a version only once its npm package names the server (`mcpName`), so this
+  # runs after npm. It asks the registry rather than trusting the npm job, so a re-run publishes a version the
+  # registry missed, and a version it already has is left alone.
+  registry:
+    needs: [version, npm]
+    if: ${{ !cancelled() && needs.npm.result != 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - id: listed
+        name: is this version in the registry yet?
+        env:
+          V: ${{ needs.version.outputs.version }}
+        run: |
+          name=$(jq -r .name server.json)
+          code=$(curl -s -o /dev/null -w '%{http_code}' "https://registry.modelcontextprotocol.io/v0.1/servers/${name/\//%2F}/versions/$V")
+          case $code in
+            200) echo "new=false" >> "$GITHUB_OUTPUT"; echo "$name $V is in the registry already" ;;
+            404) echo "new=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "the registry answered $code for $name $V" >&2; exit 1 ;;
+          esac
+      - if: steps.listed.outputs.new == 'true'
+        name: install mcp-publisher 1.8.7
+        run: |
+          curl -fsSL -o p.tgz https://github.com/modelcontextprotocol/registry/releases/download/v1.8.7/mcp-publisher_linux_amd64.tar.gz
+          echo "00b21004149a4ce66f0782508ae4a2bce67d1bea395a8da0bd8028159fb59579  p.tgz" | sha256sum -c -
+          tar xzf p.tgz mcp-publisher
+      - if: steps.listed.outputs.new == 'true'
+        name: publish server.json at the package's version
+        env:
+          V: ${{ needs.version.outputs.version }}
+        run: |
+          jq --arg v "$V" '.version = $v | .packages[0].version = $v' server.json > s.json && mv s.json server.json
+          ./mcp-publisher login github-oidc
+          # npm can take a moment to serve a version it has just accepted; the registry reads mcpName from it.
+          for _ in 1 2 3 4 5; do ./mcp-publisher publish && exit 0; sleep 30; done
+          exit 1

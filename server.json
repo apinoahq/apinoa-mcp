@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.apinoahq/apinoa-mcp",
+  "title": "apinoa",
+  "description": "Products, social posts, search results and AI answers from Amazon, TikTok, Google, ChatGPT and more.",
+  "websiteUrl": "https://apinoa.com/docs/sdks",
+  "repository": {
+    "url": "https://github.com/apinoahq/apinoa-mcp",
+    "source": "github",
+    "id": "1433530725"
+  },
+  "version": "0.2.6",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "apinoa-mcp",
+      "version": "0.2.6",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "APINOA_API_KEY",
+          "description": "Your apinoa API key (create one at https://apinoa.com/en/dashboard/api-keys).",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "APINOA_MCP_MODE",
+          "description": "code (default): one sandboxed TypeScript tool over the whole API. tools: one tool per kind of read.",
+          "isRequired": false,
+          "format": "string",
+          "default": "code",
+          "choices": [
+            "code",
+            "tools"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -131,6 +131,7 @@ const server = await createApinoaServer({ apiKey: process.env.APINOA_API_KEY });
 - [@apinoa/sdk](https://www.npmjs.com/package/@apinoa/sdk): the TypeScript SDK
 - [apinoa on PyPI](https://pypi.org/project/apinoa/): the Python SDK
 - [API documentation](https://apinoa.com/docs)
+- [Official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.apinoahq/apinoa-mcp): listed as `io.github.apinoahq/apinoa-mcp`
 
 ## License
 
