@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.2.9
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-08:
+
+- New operations: `GET /v1/company/technologies`, `POST /v1/copilot/answer`, `GET /v1/facebook/profile`, `GET /v1/facebook/ads`.
+- New type `CompanyPage`.
+- New type `Dns`.
+- New type `Evidence`.
+- New type `FacebookAd`.
+- New type `FacebookAdCard`.
+- New type `FacebookAdDisclaimer`.
+- New type `FacebookAdImage`.
+- New type `FacebookAdPage`.
+- New type `FacebookAdVideo`.
+- New type `FacebookAdsPage`.
+- New type `FacebookAdsPageResponse`.
+- New type `FacebookRange`.
+- New type `Redirect`.
+- New type `Robots`.
+- New type `TechnologiesResult`.
+- New type `TechnologiesResultResponse`.
+- New type `Technology`.
+
 ## 0.2.8
 
 - New: `npx apinoa-mcp login` gets an API key from the terminal. It prints an apinoa address and a code, opens the page in your browser, and once you sign in, enter the code and approve, saves the key to `.env` in the current folder as `APINOA_API_KEY` (`--out <path>` for another file, `--no-browser` to only print the address). An existing `APINOA_API_KEY` line is replaced and the rest of the file is kept; a new file is readable by you only. It warns when the file is not ignored by git or other users can read it, and it never prints the full key.

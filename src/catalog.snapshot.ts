@@ -1429,6 +1429,101 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "company",
+  "kind": "company",
+  "operations": [
+   "technologies"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "technologies": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "technologies": {
+    "type": "object",
+    "properties": {
+     "domain": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 2048,
+      "description": "The company's domain, e.g. stripe.com. A web address (https://stripe.com/pricing) is accepted and read as its host."
+     }
+    },
+    "required": [
+     "domain"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "copilot",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "daum",
   "kind": "serp",
   "operations": [
@@ -1676,6 +1771,150 @@ const snapshot: unknown = [
     "required": [
      "q"
     ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
+  "id": "facebook",
+  "kind": "sns",
+  "operations": [
+   "profile",
+   "ads"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "profile": {
+    "base": 1,
+    "max": 1
+   },
+   "ads": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "profile": {
+    "type": "object",
+    "properties": {
+     "username": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The Page's vanity name (e.g. nasa), its numeric id, or the Page URL."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "ads": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Keywords to search the Ad Library for."
+     },
+     "pageId": {
+      "type": "string",
+      "pattern": "^\\d+$",
+      "description": "Every ad one advertiser runs: its numeric Page id (`profile` returns it as `id`)."
+     },
+     "exact": {
+      "type": "boolean",
+      "description": "query: match the exact phrase instead of any of its words."
+     },
+     "country": {
+      "type": "string",
+      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "active",
+       "inactive",
+       "all"
+      ],
+      "description": "active (default), inactive or all."
+     },
+     "adType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "political",
+       "housing",
+       "employment",
+       "credit"
+      ],
+      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
+     },
+     "mediaType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "image",
+       "video",
+       "meme",
+       "image_and_meme",
+       "none"
+      ],
+      "description": "all (default), image, video, meme, image_and_meme, none."
+     },
+     "platforms": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Only ads that ran on these platforms."
+     },
+     "languages": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Only ads in these languages (ISO 639-1)."
+     },
+     "startDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads that started running on or after this day (YYYY-MM-DD)."
+     },
+     "endDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads that started running on or before this day (YYYY-MM-DD)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevance",
+       "impressions"
+      ],
+      "description": "relevance (default), or impressions (highest first; Facebook states impressions for political ads)."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
@@ -3716,7 +3955,7 @@ const snapshot: unknown = [
    },
    "jobs": {
     "base": 1,
-    "max": 1
+    "max": 2
    }
   },
   "params": {
@@ -3816,6 +4055,11 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Job search keywords (e.g. software engineer)."
+     },
+     "company": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Only this company's jobs: its vanity name (e.g. stripe), its company URL, or its numeric LinkedIn company id."
      },
      "location": {
       "type": "string",
