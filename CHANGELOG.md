@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.11
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-10:
+
+- `Group`: new `audio`.
+
 ## 0.2.10
 
 - New tool `read_image_text`: reads the text in an image from its URL (OCR) and returns every region with its

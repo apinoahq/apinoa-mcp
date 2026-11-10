@@ -3873,6 +3873,11 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "A location: numeric id or URL (…/explore/locations/<id>/)."
      },
+     "sound": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A sound: audio id or its page URL (…/reels/audio/<id>/). Returns the track — `audio.url` is the full-length audio file, with title, artist and length — licensed music or a creator's original audio."
+     },
      "include": {
       "anyOf": [
        {
@@ -3885,7 +3890,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "Attach from the same page, at no extra cost: posts (the tag's top posts / the location's posts, ext.posts)."
+      "description": "Attach from the same page, at no extra cost: posts (the tag's top posts / the location's posts / the reels using the sound, ext.posts)."
      }
     },
     "additionalProperties": false,
