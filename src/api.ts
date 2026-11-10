@@ -109,6 +109,12 @@ export async function translateImage(
   return { contentType: type || "image/jpeg", bytes: new Uint8Array(await res.arrayBuffer()), ...(Number.isFinite(regions) ? { regions } : {}) };
 }
 
+/** OCR: raw bytes in, every text region as JSON out. */
+export async function readImageText(o: ApiOptions, image: Uint8Array, contentType: string, language?: string): Promise<unknown> {
+  const q = toQuery({ language }).toString();
+  return unwrap(await send(o, `/v1/ocr${q ? `?${q}` : ""}`, { method: "POST", headers: { "content-type": contentType }, body: image as BodyInit }));
+}
+
 /** Download an image a tool was pointed at. */
 export async function download(o: ApiOptions, url: string, maxBytes = 20 * 1024 * 1024): Promise<{ bytes: Uint8Array; contentType: string }> {
   if (!/^https?:\/\//i.test(url)) throw new ApiError(400, "INVALID_IMAGE_URL", "image_url must be an http(s) URL");

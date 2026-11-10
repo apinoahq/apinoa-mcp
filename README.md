@@ -72,6 +72,7 @@ Requires Node.js 20 or later. The package installs [Deno](https://deno.com), whi
 | `search_docs` | Finds the operations for a task: how to call each, every parameter, the cost, and the fields it returns. Free |
 | `execute` | Runs TypeScript the model writes against the API, and returns only what the code returns or prints |
 | `translate_image` | Replaces the text in an image with a translation; returns the image |
+| `read_image_text` | Reads the text in an image (OCR): every region with its text, confidence and position |
 
 Instead of one tool call per API call, the model writes a short program. Fanning out over 50 accounts,
 following pages, filtering and averaging happen in the code, and only the answer comes back into the

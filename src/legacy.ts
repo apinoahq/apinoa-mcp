@@ -121,7 +121,7 @@ function withoutRenditions(data: unknown): unknown {
   return out;
 }
 
-function result(raw: unknown, maxChars: number): CallToolResult {
+export function result(raw: unknown, maxChars: number): CallToolResult {
   const data = withoutRenditions(raw);
   const text = JSON.stringify(data);
   if (text.length <= maxChars) return { content: [{ type: "text", text }] };

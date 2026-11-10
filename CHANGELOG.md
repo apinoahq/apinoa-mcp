@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.10
+
+- New tool `read_image_text`: reads the text in an image from its URL (OCR) and returns every region with its
+  text, confidence and position. It calls the new OCR API, `POST /v1/ocr`: one credit per image, a very long image
+  one credit per section it is read in. Served in both modes, like `translate_image`.
+
 ## 0.2.9
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-08:

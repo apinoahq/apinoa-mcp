@@ -58,7 +58,7 @@ test("tools are named by intent, and each lists only the platforms that have its
   const client = await connect({ catalog: CATALOG, fetch: fakeFetch({}) });
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name).sort();
-  assert.deepEqual(names, ["call_apinoa", "get_product", "get_product_reviews", "get_social_profile", "list_platforms", "list_social_posts", "search_products", "search_products_by_image", "translate_image"]);
+  assert.deepEqual(names, ["call_apinoa", "get_product", "get_product_reviews", "get_social_profile", "list_platforms", "list_social_posts", "read_image_text", "search_products", "search_products_by_image", "translate_image"]);
   const search = tools.find((t) => t.name === "search_products");
   assert.deepEqual(search.inputSchema.properties.platform.enum, ["walmart", "amazon"]);
   assert.match(search.description, /- walmart \[1 unit\]: query\*, page, priceMax/);
@@ -121,6 +121,20 @@ test("call_apinoa reaches any operation but refuses one that returns a file", as
   const media = await client.callTool({ name: "call_apinoa", arguments: { platform: "tiktok", operation: "media", params: { post: "1" } } });
   assert.equal(media.isError, true);
   assert.equal(fetch.calls.length, 1);
+});
+
+test("read_image_text downloads the image, posts its bytes to /v1/ocr and returns the regions", async () => {
+  const fetch = fakeFetch({
+    "https://img.test/p.png": () => [200, new Uint8Array([0x89, 0x50, 1]), { "content-type": "image/png" }],
+    "POST /v1/ocr": () => [200, { success: true, data: { regions: [{ index: 0, text: "限时特价", confidence: 0.99 }], regions_found: 1 } }],
+  });
+  const client = await connect({ catalog: CATALOG, fetch });
+  const res = await client.callTool({ name: "read_image_text", arguments: { image_url: "https://img.test/p.png", language: "zh-CN" } });
+  const call = fetch.calls.find((c) => c.method === "POST");
+  assert.equal(call.url.searchParams.get("language"), "zh-CN");
+  assert.equal(call.headers["content-type"], "image/png");
+  assert.equal(res.isError, undefined);
+  assert.equal(JSON.parse(res.content[0].text).regions[0].text, "限时特价");
 });
 
 test("translate_image returns the translated picture as image content", async () => {

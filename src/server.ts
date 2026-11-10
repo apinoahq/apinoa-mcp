@@ -15,11 +15,11 @@ import { createRequire } from "node:module";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { fetchCatalog, translateImage, download, type ApiOptions, type CatalogEntry } from "./api.js";
+import { fetchCatalog, translateImage, readImageText, download, type ApiOptions, type CatalogEntry } from "./api.js";
 import SNAPSHOT from "./catalog.snapshot.js";
 import { declarations, operations, overview, sandboxOperations, searchDocs, type Operation } from "./code/docs.js";
 import { Sandbox, denoRuns, findDeno, type SandboxOptions } from "./code/sandbox.js";
-import { failure, registerLegacyTools } from "./legacy.js";
+import { failure, registerLegacyTools, result } from "./legacy.js";
 
 // The published package's own version (dist/ and src/ both sit one level below package.json), so a release
 // cannot announce the previous one.
@@ -77,7 +77,7 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
           ? " Find the operations and fields with search_docs, then call them from TypeScript in execute: fan out, page, filter and aggregate in the code, and return only the result."
           : " Products: search_products, get_product, get_product_reviews, list_categories, browse_category. Social: get_social_profile, list_social_posts, get_social_post, get_social_comments. " +
             "Search results and AI answers: call_apinoa with a platform (google, bing, naver, chatgpt, gemini…) and its operation (search, answer…); list_platforms lists every operation and its parameters. " +
-            "translate_image translates the text in a product photo."),
+            "translate_image translates the text in a product photo; read_image_text reads it (OCR)."),
     },
   );
   const readOnly = { readOnlyHint: true, openWorldHint: true } as const;
@@ -116,6 +116,34 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
           };
         }
         return { content: [{ type: "text", text: new TextDecoder().decode(out.bytes) }] };
+      } catch (e) {
+        return failure(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "read_image_text",
+    {
+      title: "Read the text in an image (OCR)",
+      description:
+        "OCR: read the text in an image. Give the image as a URL. Returns every text region with its text, confidence, " +
+        "bounding box and polygon. Reads Chinese (Simplified and Traditional), Japanese, English and other Latin-script " +
+        "text. One credit per image; an image whose long side is 2.5 times its short side or more is read in sections, one credit each.",
+      inputSchema: {
+        image_url: z.string().url().describe("An http(s) URL of a JPEG, PNG or WebP image."),
+        language: z
+          .enum(["auto", "zh-CN", "zh-TW", "ja", "en"])
+          .optional()
+          .describe("auto (default) returns all the text; another value returns only the text in that language."),
+      },
+      annotations: { title: "Read the text in an image", ...readOnly },
+      _meta: { "anthropic/maxResultSizeChars": maxChars + 2000 },
+    },
+    async (args: any) => {
+      try {
+        const img = await download(api, args.image_url);
+        return result(await readImageText(api, img.bytes, img.contentType, args.language), maxChars);
       } catch (e) {
         return failure(e);
       }
