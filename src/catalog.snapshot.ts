@@ -3729,7 +3729,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 1
+    "max": 2
    },
    "posts": {
     "base": 1,
@@ -7016,7 +7016,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 1
+    "max": 2
    },
    "posts": {
     "base": 1,
@@ -7087,6 +7087,20 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Video id (11 chars), or the video URL (watch?v=…, youtu.be/…, /shorts/…)."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "watch: also read the watch page — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song (+1 unit)."
      }
     },
     "additionalProperties": false,

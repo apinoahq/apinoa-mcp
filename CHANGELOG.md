@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.12
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-10.
+
 ## 0.2.11
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-10:
