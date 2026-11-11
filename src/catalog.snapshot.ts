@@ -3729,7 +3729,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 2
+    "max": 3
    },
    "posts": {
     "base": 1,
@@ -3795,7 +3795,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "Attach from the same page, at no extra cost: comments (the first comments, ext.comments), authorPosts (the author's other recent posts, ext.authorPosts)."
+      "description": "comments (the first comments, ext.comments) and authorPosts (the author's other recent posts, ext.authorPosts) come from the same page at no extra cost · audio: also read the post's sound — the audio file (audio.url), its full length (audio.durationSec) and cover art (+1 unit)."
      }
     },
     "additionalProperties": false,
@@ -7024,7 +7024,7 @@ const snapshot: unknown = [
    },
    "comments": {
     "base": 1,
-    "max": 2
+    "max": 3
    },
    "groups": {
     "base": 1,
@@ -7170,6 +7170,14 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "A comment's replies: the comment's `moreReplies.cursor`."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "top",
+       "recent"
+      ],
+      "description": "post: top (default — YouTube's most-liked first, with each comment's likes) or recent (newest first, +1 unit). First page only; the cursor keeps its order."
      },
      "cursor": {
       "type": "string",
