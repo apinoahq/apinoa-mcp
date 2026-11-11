@@ -7044,20 +7044,6 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Channel id (UC…)."
-     },
-     "include": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "array",
-        "items": {
-         "type": "string"
-        }
-       }
-      ],
-      "description": "Deprecated, accepted and ignored: the About panel — join date (createdAt), exact video count, total views, country and every link — is always read."
      }
     },
     "additionalProperties": false,
@@ -7087,20 +7073,6 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Video id (11 chars), or the video URL (watch?v=…, youtu.be/…, /shorts/…)."
-     },
-     "include": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "array",
-        "items": {
-         "type": "string"
-        }
-       }
-      ],
-      "description": "watch: the watch page's reading — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song. Deprecated, accepted and ignored: always included."
      }
     },
     "additionalProperties": false,
