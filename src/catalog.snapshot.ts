@@ -3795,7 +3795,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "comments (the first comments, ext.comments) and authorPosts (the author's other recent posts, ext.authorPosts) come from the same page at no extra cost · audio: also read the post's sound — the audio file (audio.url), its full length (audio.durationSec) and cover art (+1 unit)."
+      "description": "Attach from the same page, at no extra cost: comments (the first comments, ext.comments), authorPosts (the author's other recent posts, ext.authorPosts)."
      }
     },
     "additionalProperties": false,
@@ -3960,7 +3960,7 @@ const snapshot: unknown = [
    },
    "jobs": {
     "base": 1,
-    "max": 2
+    "max": 1
    }
   },
   "params": {
@@ -5450,7 +5450,7 @@ const snapshot: unknown = [
    },
    "profiles": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "post": {
     "base": 1,
@@ -5458,7 +5458,7 @@ const snapshot: unknown = [
    },
    "posts": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "comments": {
     "base": 1,
@@ -5470,7 +5470,7 @@ const snapshot: unknown = [
    },
    "groups": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "media": {
     "base": 2,
@@ -6396,7 +6396,7 @@ const snapshot: unknown = [
    },
    "posts": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "group": {
     "base": 1,
@@ -7008,7 +7008,7 @@ const snapshot: unknown = [
   "cost": {
    "profile": {
     "base": 1,
-    "max": 3
+    "max": 1
    },
    "profiles": {
     "base": 1,
@@ -7020,15 +7020,15 @@ const snapshot: unknown = [
    },
    "posts": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "comments": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "groups": {
     "base": 1,
-    "max": 2
+    "max": 1
    }
   },
   "params": {
@@ -7057,7 +7057,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "about: also read the channel's About panel — join date (createdAt), exact video count, total views, country and every link (+1 unit)."
+      "description": "Deprecated, accepted and ignored: the About panel — join date (createdAt), exact video count, total views, country and every link — is always read."
      }
     },
     "additionalProperties": false,
@@ -7100,7 +7100,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "watch: the watch page's reading — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song. Always included now; the value is accepted so existing calls keep working."
+      "description": "watch: the watch page's reading — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song. Deprecated, accepted and ignored: always included."
      }
     },
     "additionalProperties": false,
