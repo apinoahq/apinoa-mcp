@@ -58,12 +58,12 @@ test("tools are named by intent, and each lists only the platforms that have its
   const client = await connect({ catalog: CATALOG, fetch: fakeFetch({}) });
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name).sort();
-  assert.deepEqual(names, ["call_apinoa", "get_product", "get_product_reviews", "get_social_profile", "list_platforms", "list_social_posts", "read_image_text", "search_products", "search_products_by_image", "translate_image"]);
+  assert.deepEqual(names, ["call_apinoa", "get_feedback", "get_product", "get_product_reviews", "get_social_profile", "list_platforms", "list_social_posts", "read_image_text", "search_products", "search_products_by_image", "send_feedback", "translate_image"]);
   const search = tools.find((t) => t.name === "search_products");
   assert.deepEqual(search.inputSchema.properties.platform.enum, ["walmart", "amazon"]);
   assert.match(search.description, /- walmart \[1 unit\]: query\*, page, priceMax/);
   assert.deepEqual(search.inputSchema.required.sort(), ["platform", "query"]);
-  assert.ok(tools.every((t) => t.annotations?.readOnlyHint === true));
+  assert.ok(tools.every((t) => t.annotations?.readOnlyHint === (t.name !== "send_feedback")));
   assert.ok(search._meta["anthropic/maxResultSizeChars"] >= 100_000, "Claude Code keeps answers up to the cap in the conversation");
 });
 

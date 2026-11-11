@@ -124,3 +124,38 @@ export async function download(o: ApiOptions, url: string, maxBytes = 20 * 1024 
   if (bytes.byteLength > maxBytes) throw new ApiError(413, "IMAGE_TOO_LARGE", `the image is over ${maxBytes / 1024 / 1024} MB`);
   return { bytes, contentType: (res.headers.get("content-type") ?? "image/jpeg").split(";")[0]!.trim() };
 }
+
+/** A feedback report (POST /v1/feedback): what went wrong or what is missing. Free, with or without a key. */
+export interface FeedbackInput {
+  type: "feature_request" | "error" | "wrong_data" | "missing_data" | "other";
+  message: string;
+  platform?: string;
+  operation?: string;
+  params?: Record<string, unknown>;
+  requestId?: string;
+  url?: string;
+  /** Text, or the JSON value as it came back. */
+  received?: unknown;
+  expected?: unknown;
+  contact?: string;
+}
+
+export interface FeedbackReceipt {
+  id: string;
+  status: string;
+  createdAt: string;
+}
+
+/**
+ * Send a report, marked as coming from this server. Not retried: a refused report (a 429 asks for an hour) is
+ * told to the agent at once rather than holding its turn; a repeat within a day returns the first report.
+ */
+export async function sendFeedback(o: ApiOptions, body: FeedbackInput): Promise<FeedbackReceipt> {
+  const init = { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...body, source: "mcp" }) };
+  return (await unwrap(await send(o, "/v1/feedback", init, 1))) as FeedbackReceipt;
+}
+
+/** A report's status and our reply, by its id. */
+export async function getFeedback(o: ApiOptions, id: string): Promise<unknown> {
+  return unwrap(await send(o, `/v1/feedback/${encodeURIComponent(id)}`, { method: "GET" }, 1));
+}

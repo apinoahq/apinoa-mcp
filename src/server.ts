@@ -15,7 +15,7 @@ import { createRequire } from "node:module";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { fetchCatalog, translateImage, readImageText, download, type ApiOptions, type CatalogEntry } from "./api.js";
+import { fetchCatalog, translateImage, readImageText, download, sendFeedback, getFeedback, type ApiOptions, type CatalogEntry } from "./api.js";
 import SNAPSHOT from "./catalog.snapshot.js";
 import { declarations, operations, overview, sandboxOperations, searchDocs, type Operation } from "./code/docs.js";
 import { Sandbox, denoRuns, findDeno, type SandboxOptions } from "./code/sandbox.js";
@@ -150,7 +150,70 @@ export async function createApinoaServer(options: ServerOptions = {}): Promise<M
     },
   );
 
+  registerFeedbackTools(server, api, maxChars);
+
   return server;
+}
+
+/**
+ * Feedback, in every mode and without a key: the agent that hit the problem is the one best placed to report it,
+ * with the exact call, while it still has it.
+ */
+function registerFeedbackTools(server: McpServer, api: ApiOptions, maxChars: number) {
+  server.registerTool(
+    "send_feedback",
+    {
+      title: "Send feedback to apinoa",
+      description:
+        "Tell apinoa when a call failed, returned wrong or missing data, or when a platform, operation or option you need does not exist. " +
+        "Include what you called (platform, operation, params), the request_id of the response, what came back (received) and what you " +
+        "expected; for a request, describe what you need in message. Free, and works without an API key. Returns an id: read the status " +
+        "and our reply later with get_feedback. Give contact to also get the reply by email.",
+      inputSchema: {
+        type: z
+          .enum(["feature_request", "error", "wrong_data", "missing_data", "other"])
+          .describe("feature_request: something apinoa lacks. error: a call failed. wrong_data: a field is wrong. missing_data: something on the page is not in the answer. other."),
+        message: z.string().min(1).max(4000).describe("What happened, or what you need, in a few sentences."),
+        platform: z.string().max(64).optional().describe("The platform called, e.g. amazon, tiktok, google."),
+        operation: z.string().max(64).optional().describe("The operation called, e.g. search, product, posts."),
+        params: z.record(z.string(), z.unknown()).optional().describe("The parameters it was called with."),
+        request_id: z.string().max(128).optional().describe("The requestId of the response being reported."),
+        url: z.string().url().max(2048).optional().describe("A page that shows the right data, or the item it is about."),
+        received: z.unknown().optional().describe("The part of the answer that is wrong, as text or the JSON value itself (at most 16 KB)."),
+        expected: z.unknown().optional().describe("What it should have been, as text or a JSON value."),
+        contact: z.string().email().max(254).optional().describe("An email address for the reply, if the user gave one."),
+      },
+      annotations: { title: "Send feedback to apinoa", readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async (args: any) => {
+      try {
+        const { request_id, ...rest } = args;
+        const sent = await sendFeedback(api, { ...rest, ...(request_id ? { requestId: request_id } : {}) });
+        return {
+          content: [{ type: "text", text: `Feedback received: id ${sent.id} (status ${sent.status}). Read the status and our reply later with get_feedback.` }],
+        };
+      } catch (e) {
+        return failure(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "get_feedback",
+    {
+      title: "Read a feedback report's status",
+      description: "The status of a report sent with send_feedback (received, in_progress, resolved or declined) and our reply, by its id. Free.",
+      inputSchema: { id: z.string().min(1).max(64).describe("The id send_feedback returned.") },
+      annotations: { title: "Read a feedback report's status", readOnlyHint: true, openWorldHint: true },
+    },
+    async (args: any) => {
+      try {
+        return result(await getFeedback(api, args.id), maxChars);
+      } catch (e) {
+        return failure(e);
+      }
+    },
+  );
 }
 
 /** Display names for the sources the server introduces itself with; an id without one is shown as it is. */

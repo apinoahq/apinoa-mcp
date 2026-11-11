@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.18
+
+- New tools `send_feedback` and `get_feedback`: report a failed call, wrong or missing data, or an API you need, free and without a key, and read the status and our reply by the report's id.
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-11:
+
+- New operations: `POST /v1/feedback`, `GET /v1/feedback/{id}`.
+- New type `FeedbackInput`.
+- New type `FeedbackReceipt`.
+- New type `FeedbackReceiptResponse`.
+- New type `FeedbackStatus`.
+- New type `FeedbackStatusResponse`.
+
 ## 0.2.17
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-11:

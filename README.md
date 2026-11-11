@@ -73,6 +73,8 @@ Requires Node.js 20 or later. The package installs [Deno](https://deno.com), whi
 | `execute` | Runs TypeScript the model writes against the API, and returns only what the code returns or prints |
 | `translate_image` | Replaces the text in an image with a translation; returns the image |
 | `read_image_text` | Reads the text in an image (OCR): every region with its text, confidence and position |
+| `send_feedback` | Reports a failed call, wrong or missing data, or an API you need. Free, and works without a key |
+| `get_feedback` | Reads a report's status and our reply by its id |
 
 Instead of one tool call per API call, the model writes a short program. Fanning out over 50 accounts,
 following pages, filtering and averaging happen in the code, and only the answer comes back into the

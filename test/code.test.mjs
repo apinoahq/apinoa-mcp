@@ -83,11 +83,11 @@ const fresh = (r = {}) => {
 test("code mode serves search_docs, execute, translate_image and read_image_text, and says how to use them", async () => {
   const { client } = await connect();
   const { tools } = await client.listTools();
-  assert.deepEqual(tools.map((t) => t.name).sort(), ["execute", "read_image_text", "search_docs", "translate_image"]);
+  assert.deepEqual(tools.map((t) => t.name).sort(), ["execute", "get_feedback", "read_image_text", "search_docs", "send_feedback", "translate_image"]);
   const execute = tools.find((t) => t.name === "execute");
   assert.match(execute.description, /apinoa\.tiktok: profile, posts, comments, media/);
   assert.match(execute.description, /type-checked before it runs/);
-  assert.ok(tools.every((t) => t.annotations?.readOnlyHint === true));
+  assert.ok(tools.every((t) => t.annotations?.readOnlyHint === (t.name !== "send_feedback")));
   assert.match(client.getInstructions(), /search_docs/);
 });
 
