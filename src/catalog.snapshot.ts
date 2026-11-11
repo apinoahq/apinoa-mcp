@@ -3729,7 +3729,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 3
+    "max": 1
    },
    "posts": {
     "base": 1,
@@ -7016,7 +7016,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 2
+    "max": 1
    },
    "posts": {
     "base": 1,
@@ -7024,7 +7024,7 @@ const snapshot: unknown = [
    },
    "comments": {
     "base": 1,
-    "max": 3
+    "max": 2
    },
    "groups": {
     "base": 1,
@@ -7100,7 +7100,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "watch: also read the watch page — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song (+1 unit)."
+      "description": "watch: the watch page's reading — the channel's subscriber count (author.counts.followers), the comment count (metrics.comments, abbreviated as the page shows it; comments gives the exact total), the description's #hashtags / @mentions / links (entities), chapters and the song. Always included now; the value is accepted so existing calls keep working."
      }
     },
     "additionalProperties": false,
@@ -7177,7 +7177,7 @@ const snapshot: unknown = [
        "top",
        "recent"
       ],
-      "description": "post: top (default — YouTube's most-liked first, with each comment's likes) or recent (newest first, +1 unit). First page only; the cursor keeps its order."
+      "description": "post: top (default — YouTube's most-liked first, with each comment's likes) or recent (newest first). First page only; the cursor keeps its order."
      },
      "cursor": {
       "type": "string",
