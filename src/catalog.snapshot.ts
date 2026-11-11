@@ -1631,6 +1631,81 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "dola",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "KR",
+   "JP",
+   "DE",
+   "GB",
+   "AU",
+   "FR",
+   "IT",
+   "SG",
+   "TW",
+   "HK"
+  ],
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "conversation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "duckduckgo",
   "kind": "serp",
   "operations": [

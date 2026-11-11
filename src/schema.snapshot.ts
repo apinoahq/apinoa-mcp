@@ -25,6 +25,7 @@ export const RETURNS: Record<string, string> = {
  "copilot/answer": "Answer",
  "daum/search": "ResultsPage",
  "daum/suggestions": "Suggestions",
+ "dola/answer": "Answer",
  "duckduckgo/search": "ResultsPage",
  "duckduckgo/suggestions": "Suggestions",
  "facebook/profile": "Account",
