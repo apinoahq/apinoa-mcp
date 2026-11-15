@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.19
+
+- The bundled catalog lists `CN` among `dola`'s countries: mainland China is answered by Doubao (豆包), ByteDance's service there, in the same `Answer` shape.
+
 ## 0.2.18
 
 - New tools `send_feedback` and `get_feedback`: report a failed call, wrong or missing data, or an API you need, free and without a key, and read the status and our reply by the report's id.

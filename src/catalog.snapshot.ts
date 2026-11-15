@@ -1649,7 +1649,8 @@ const snapshot: unknown = [
    "IT",
    "SG",
    "TW",
-   "HK"
+   "HK",
+   "CN"
   ],
   "cost": {
    "answer": {
