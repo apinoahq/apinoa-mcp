@@ -65,6 +65,7 @@ export const RETURNS: Record<string, string> = {
  "naver/reviews": "PlaceReviewsPage",
  "naver-ai-brief/answer": "Answer",
  "naver-ai-tab/answer": "Answer",
+ "qwen/answer": "Answer",
  "reddit/profile": "Account",
  "reddit/profiles": "AccountPage",
  "reddit/post": "Post",

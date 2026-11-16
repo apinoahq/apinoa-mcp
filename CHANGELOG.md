@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.20
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-16:
+
+- New operations: `POST /v1/qwen/answer`.
+
 ## 0.2.19
 
 - The bundled catalog lists `CN` among `dola`'s countries: mainland China is answered by Doubao (豆包), ByteDance's service there, in the same `Answer` shape.
