@@ -2338,6 +2338,11 @@ const snapshot: unknown = [
       "maxLength": 200,
       "description": "Search around this place name, or a `lat,lng` point."
      },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Search as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
+     },
      "country": {
       "type": "string",
       "enum": [
@@ -2364,6 +2369,12 @@ const snapshot: unknown = [
       "minimum": 1,
       "maximum": 60,
       "description": "Results wanted (default 20, at most 60). More than one page is charged per page."
+     },
+     "pages": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3,
+      "description": "Pages of 20 places to read in one call (1-3), returned as one list. Instead of `limit`; each page past the first is charged as one more unit."
      },
      "cursor": {
       "type": "string",
@@ -2460,6 +2471,17 @@ const snapshot: unknown = [
        }
       ],
       "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Ask as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. The place must be in the country asked."
+     },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Ask as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
      }
     },
     "required": [
@@ -2525,6 +2547,17 @@ const snapshot: unknown = [
        }
       ],
       "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Ask as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. The place must be in the country asked."
+     },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Ask as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
      }
     },
     "required": [

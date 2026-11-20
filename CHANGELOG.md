@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.22
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-20:
+
+- Google search, AI Overviews and AI Mode take `near` (a city, region or US state, e.g. "Austin, Texas") or `uule` to search from a place inside the country; Google places takes `uule` and `pages` (1–3).
+- `ReaderPage`: new `frameUrl`.
+
 ## 0.2.21
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20:
