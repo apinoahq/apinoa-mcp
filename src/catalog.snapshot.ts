@@ -696,7 +696,12 @@ const snapshot: unknown = [
      "id": {
       "type": "string",
       "minLength": 1,
-      "description": "The marketplace's own product id, as carried by a search item."
+      "description": "The ASIN (or a book's ISBN-10), as a search item's `id` carries it. Pass this or `url`."
+     },
+     "url": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An Amazon product page link instead of `id`, e.g. https://www.amazon.com/dp/B07JD5GLBN or https://www.amazon.co.jp/<name>/dp/<ASIN>. The link's site sets `region` (amazon.co.jp is JP); a `region` that disagrees with it is refused."
      },
      "include": {
       "type": "string",
@@ -725,9 +730,6 @@ const snapshot: unknown = [
       "description": "Which Amazon marketplace to query, by buyer country: US, CA, MX, BR, FR, IT, ES, NL, SE, TR, AE, SA, IN, JP, SG, AU. Defaults to US. Prices come back in that marketplace's own currency (JP in JPY, FR in EUR)."
      }
     },
-    "required": [
-     "id"
-    ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
@@ -1401,6 +1403,10 @@ const snapshot: unknown = [
       "maxItems": 4,
       "description": "Up to four photos to ask about: https URLs, or `data:image/…;base64,` URLs."
      },
+     "webSearch": {
+      "type": "boolean",
+      "description": "Let the engine search the web for the answer."
+     },
      "include": {
       "anyOf": [
        {
@@ -1473,7 +1479,33 @@ const snapshot: unknown = [
    "page"
   ],
   "regions": [
-   "US"
+   "US",
+   "AE",
+   "AU",
+   "BR",
+   "CA",
+   "DE",
+   "EE",
+   "ES",
+   "FR",
+   "GB",
+   "HK",
+   "HU",
+   "IE",
+   "IN",
+   "IT",
+   "JP",
+   "MX",
+   "NL",
+   "PL",
+   "PT",
+   "RO",
+   "RS",
+   "SE",
+   "SG",
+   "SK",
+   "TR",
+   "ZA"
   ],
   "cost": {
    "answer": {
@@ -1857,6 +1889,7 @@ const snapshot: unknown = [
   "kind": "sns",
   "operations": [
    "profile",
+   "profiles",
    "ads"
   ],
   "includes": [],
@@ -1865,6 +1898,10 @@ const snapshot: unknown = [
   ],
   "cost": {
    "profile": {
+    "base": 1,
+    "max": 1
+   },
+   "profiles": {
     "base": 1,
     "max": 1
    },
@@ -1886,6 +1923,33 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    },
+   "profiles": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An advertiser's name (or part of it): the Pages the Ad Library's search box suggests for it, each with the `id` that `ads?pageId=` takes."
+     },
+     "country": {
+      "type": "string",
+      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
+     },
+     "adType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "political",
+       "housing",
+       "employment",
+       "credit"
+      ],
+      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
    "ads": {
     "type": "object",
     "properties": {
@@ -1897,7 +1961,7 @@ const snapshot: unknown = [
      "pageId": {
       "type": "string",
       "pattern": "^\\d+$",
-      "description": "Every ad one advertiser runs: its numeric Page id (`profile` returns it as `id`)."
+      "description": "Every ad one advertiser runs: its numeric Page id (`profile` returns it as `id`; `profiles?query=` finds it by name)."
      },
      "exact": {
       "type": "boolean",
@@ -2096,7 +2160,7 @@ const snapshot: unknown = [
   "cost": {
    "search": {
     "base": 1,
-    "max": 5
+    "max": 10
    },
    "suggestions": {
     "base": 1,
@@ -2185,11 +2249,28 @@ const snapshot: unknown = [
       ],
       "description": "Safe search."
      },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Search as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. Sets `country` to the place's country when `country` is not given."
+     },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Search as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
+     },
      "limit": {
       "type": "integer",
       "minimum": 1,
       "maximum": 50,
       "description": "Results wanted (default 10, at most 50). More than one page is charged per page."
+     },
+     "pages": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Result pages to read in one call (1-10), returned as one list. Instead of `limit`; each page past the first is charged as one more unit."
      },
      "cursor": {
       "type": "string",
@@ -4580,6 +4661,69 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "reader",
+  "kind": "reader",
+  "operations": [
+   "page"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "page": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "page": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "maxLength": 2048,
+      "format": "uri",
+      "description": "The page's address, http or https."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Extra fields, comma-separated: `html` (the page as fetched), `contentHtml` (its main content as HTML)."
+     },
+     "maxChars": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 1000000,
+      "description": "Cut `markdown` to at most this many characters, at a paragraph break where one is near; `truncated` is then true."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US"
+      ],
+      "default": "US",
+      "description": "Where the page is read from."
+     }
+    },
+    "required": [
+     "url"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "reddit",
   "kind": "sns",
   "operations": [
@@ -6218,6 +6362,90 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "unlocker",
+  "kind": "unlocker",
+  "operations": [
+   "request"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "request": {
+    "base": 1,
+    "max": 10
+   }
+  },
+  "params": {
+   "request": {
+    "type": "object",
+    "properties": {
+     "url": {
+      "type": "string",
+      "maxLength": 8192,
+      "description": "The address to request (http or https)."
+     },
+     "method": {
+      "type": "string",
+      "enum": [
+       "GET",
+       "POST",
+       "PUT",
+       "PATCH",
+       "DELETE",
+       "HEAD"
+      ],
+      "default": "GET"
+     },
+     "headers": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      },
+      "default": {},
+      "description": "Headers to send, as given. A real browser's own headers replace User-Agent, sec-ch-ua*, Accept-Encoding, Host, Connection and Content-Length."
+     },
+     "body": {
+      "type": "string"
+     },
+     "bodyEncoding": {
+      "type": "string",
+      "enum": [
+       "text",
+       "base64"
+      ],
+      "default": "text"
+     },
+     "profile": {
+      "type": "string",
+      "enum": [
+       "desktop",
+       "mobile"
+      ],
+      "description": "Which kind of browser to present: desktop or mobile. Absent: either."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US"
+      ],
+      "default": "US"
+     },
+     "followRedirects": {
+      "type": "boolean",
+      "default": true
+     }
+    },
+    "required": [
+     "url"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "walmart",
   "kind": "marketplace",
   "operations": [
@@ -6483,7 +6711,12 @@ const snapshot: unknown = [
      "id": {
       "type": "string",
       "minLength": 1,
-      "description": "Walmart's `usItemId`, all digits, as carried by a search item — chain straight in."
+      "description": "Walmart's `usItemId`, all digits, as carried by a search item — chain straight in. Pass this or `url`."
+     },
+     "url": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A Walmart product page link instead of `id`, e.g. https://www.walmart.com/ip/<name>/5402638498. A `selectedSellerId` in the link sets `seller`."
      },
      "seller": {
       "type": "string",
@@ -6495,9 +6728,6 @@ const snapshot: unknown = [
       "description": "Buyer country as ISO 3166-1 alpha-2; sets availability, shipping and price."
      }
     },
-    "required": [
-     "id"
-    ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    },
@@ -7167,7 +7397,7 @@ const snapshot: unknown = [
    },
    "post": {
     "base": 1,
-    "max": 1
+    "max": 2
    },
    "posts": {
     "base": 1,
@@ -7224,6 +7454,38 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Video id (11 chars), or the video URL (watch?v=…, youtu.be/…, /shorts/…)."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Extra reads to attach under `ext`: transcript (the video's captions as timed segments, with every caption track it ships; +1 unit)."
+     },
+     "lang": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "include=transcript only: preferred caption languages, in order (comma-separated): en, ko, pt-BR … `en` also matches en-US. Default: the video's own caption language."
+     },
+     "generated": {
+      "type": "boolean",
+      "description": "include=transcript only: true for the auto-generated (speech recognition) track, false for a track the creator supplied. Default: the creator's first."
      }
     },
     "additionalProperties": false,
