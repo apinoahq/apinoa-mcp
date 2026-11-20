@@ -1674,7 +1674,7 @@ const snapshot: unknown = [
   }
  },
  {
-  "id": "dola",
+  "id": "doubao",
   "kind": "answers",
   "operations": [
    "answer"

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.24
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-20:
+
+- ByteDance's engine is named Doubao: its platform is `doubao` (`POST /v1/doubao/answer`), and an answer's `engine` is `"doubao"`. The server still answers `dola`.
+
 ## 0.2.23
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20:
