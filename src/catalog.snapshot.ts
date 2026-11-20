@@ -1347,6 +1347,217 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "brave",
+  "kind": "serp",
+  "operations": [
+   "search",
+   "suggestions"
+  ],
+  "includes": [],
+  "regions": [
+   "US",
+   "GB",
+   "CA",
+   "AU",
+   "NZ",
+   "IN",
+   "DE",
+   "AT",
+   "CH",
+   "FR",
+   "BE",
+   "NL",
+   "IT",
+   "ES",
+   "PT",
+   "DK",
+   "FI",
+   "NO",
+   "SE",
+   "PL",
+   "TR",
+   "BR",
+   "MX",
+   "AR",
+   "CL",
+   "JP",
+   "KR",
+   "TW",
+   "HK",
+   "ID",
+   "MY",
+   "PH",
+   "ZA",
+   "SA"
+  ],
+  "cost": {
+   "search": {
+    "base": 1,
+    "max": 10
+   },
+   "suggestions": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "search": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "web",
+       "news",
+       "images",
+       "videos"
+      ],
+      "description": "What to search: web results (default), news, images or videos."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IN",
+       "DE",
+       "AT",
+       "CH",
+       "FR",
+       "BE",
+       "NL",
+       "IT",
+       "ES",
+       "PT",
+       "DK",
+       "FI",
+       "NO",
+       "SE",
+       "PL",
+       "TR",
+       "BR",
+       "MX",
+       "AR",
+       "CL",
+       "JP",
+       "KR",
+       "TW",
+       "HK",
+       "ID",
+       "MY",
+       "PH",
+       "ZA",
+       "SA"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     },
+     "timeRange": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "Only results from this past period."
+     },
+     "safe": {
+      "type": "string",
+      "enum": [
+       "on",
+       "off"
+      ],
+      "description": "Safe search."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200,
+      "description": "Results wanted (default 20, at most 200). More than one page is charged per page."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "suggestions": {
+    "type": "object",
+    "properties": {
+     "q": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "description": "The query, search operators included."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "US",
+       "GB",
+       "CA",
+       "AU",
+       "NZ",
+       "IN",
+       "DE",
+       "AT",
+       "CH",
+       "FR",
+       "BE",
+       "NL",
+       "IT",
+       "ES",
+       "PT",
+       "DK",
+       "FI",
+       "NO",
+       "SE",
+       "PL",
+       "TR",
+       "BR",
+       "MX",
+       "AR",
+       "CL",
+       "JP",
+       "KR",
+       "TW",
+       "HK",
+       "ID",
+       "MY",
+       "PH",
+       "ZA",
+       "SA"
+      ],
+      "description": "The market, as an ISO 3166 country code."
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "chatgpt",
   "kind": "answers",
   "operations": [

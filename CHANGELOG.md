@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.28
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-20:
+
+- New operations: `GET /v1/brave/search`, `GET /v1/brave/suggestions`: Brave Search results and suggestions.
+- An answer's `engine` can be `"brave-ai-answers"`, the AI answer Brave shows above its results, returned in a `brave.search` page as an `aiOverview` item; a results page's `engine` can be `"brave"`.
+
 ## 0.2.27
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20:
