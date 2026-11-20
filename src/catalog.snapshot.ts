@@ -1370,7 +1370,7 @@ const snapshot: unknown = [
   "cost": {
    "answer": {
     "base": 1,
-    "max": 1
+    "max": 5
    }
   },
   "params": {
@@ -1406,6 +1406,17 @@ const snapshot: unknown = [
      "webSearch": {
       "type": "boolean",
       "description": "Let the engine search the web for the answer."
+     },
+     "followUps": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 16000
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "Up to 4 further questions, asked in order in the same conversation after `prompt`. Each answer is returned in `followUps` and billed like the first."
      },
      "include": {
       "anyOf": [
@@ -2084,7 +2095,7 @@ const snapshot: unknown = [
   "cost": {
    "answer": {
     "base": 1,
-    "max": 1
+    "max": 5
    }
   },
   "params": {
@@ -2107,6 +2118,17 @@ const snapshot: unknown = [
       "minLength": 1,
       "maxLength": 200,
       "description": "An earlier answer's `conversation.id`: ask a follow-up in the same conversation."
+     },
+     "followUps": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 16000
+      },
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "Up to 4 further questions, asked in order in the same conversation after `prompt`. Each answer is returned in `followUps` and billed like the first."
      },
      "include": {
       "anyOf": [
@@ -4016,6 +4038,11 @@ const snapshot: unknown = [
       "type": "string",
       "minLength": 1,
       "description": "Posts at a location: numeric location id or URL (…/explore/locations/<id>/). One page: Instagram shows the rest only to signed-in users."
+     },
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Search posts by keyword — a word, a phrase, a hashtag word or a brand name (mostly reels, Instagram's top results). `ext` carries Instagram's description of the keyword and its related searches. Some keywords Instagram shows only to signed-in users."
      },
      "cursor": {
       "type": "string",
@@ -7471,6 +7498,15 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "Search channels by keyword."
      },
+     "country": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The country YouTube ranks the search for (ISO alpha-2, default US; it biases the ranking, it does not restrict it)."
+     },
+     "exactSpelling": {
+      "type": "boolean",
+      "description": "Search the query exactly as typed: no \"Showing results for\" spelling correction (when YouTube does correct, page 1's ext.correctedQuery names what it searched)."
+     },
      "cursor": {
       "type": "string",
       "minLength": 1,
@@ -7557,15 +7593,62 @@ const snapshot: unknown = [
       "enum": [
        "videos",
        "shorts",
+       "movies",
        "live",
        "community"
       ],
-      "description": "username/userId: which channel tab — videos (default), shorts, live or community · query: videos (default) or shorts."
+      "description": "username/userId: which channel tab — videos (default), shorts, live or community · query: only videos, only shorts or only movies (omitted: YouTube's mixed results page, Shorts shelves included)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevance",
+       "top"
+      ],
+      "description": "query only: relevance (default) or top (YouTube's Popularity order, which leans on views; not a strict view-count sort)."
+     },
+     "period": {
+      "type": "string",
+      "enum": [
+       "hour",
+       "day",
+       "week",
+       "month",
+       "year"
+      ],
+      "description": "query only: uploaded within the last hour, today, this week, this month or this year (YouTube's upload-date filter; it has no other windows)."
+     },
+     "duration": {
+      "type": "string",
+      "enum": [
+       "short",
+       "medium",
+       "long"
+      ],
+      "description": "query only: short (under 3 minutes), medium (3–20 minutes) or long (over 20 minutes)."
+     },
+     "features": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "query only: results that have every one of these (comma-separated) — live, hd, 4k, subtitles (subtitles/CC), creative_commons, 360, vr180, 3d, hdr, location, purchased."
+     },
+     "exactSpelling": {
+      "type": "boolean",
+      "description": "Search the query exactly as typed: no \"Showing results for\" spelling correction (when YouTube does correct, page 1's ext.correctedQuery names what it searched)."
      },
      "country": {
       "type": "string",
       "minLength": 1,
-      "description": "Default feed only: the country whose trending feed to read (ISO alpha-2, default US)."
+      "description": "query: the country YouTube ranks the search for (ISO alpha-2, default US; it biases the ranking, it does not restrict it) · default feed: the country whose trending feed to read (default US)."
      },
      "cursor": {
       "type": "string",
@@ -7619,12 +7702,26 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "Channel id (UC…)."
      },
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Search playlists by keyword (playlists, Mixes and podcasts)."
+     },
      "type": {
       "type": "string",
       "enum": [
        "playlists"
       ],
-      "description": "playlists (a channel's playlists)."
+      "description": "playlists (a channel's playlists, or the playlists a search finds)."
+     },
+     "country": {
+      "type": "string",
+      "minLength": 1,
+      "description": "query only: the country YouTube ranks the search for (ISO alpha-2, default US; it biases, it does not restrict)."
+     },
+     "exactSpelling": {
+      "type": "boolean",
+      "description": "query only: search the query exactly as typed (no \"Showing results for\" correction)."
      },
      "cursor": {
       "type": "string",

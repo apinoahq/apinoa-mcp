@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.23
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-20:
+
+- ChatGPT and Gemini `answer` take `followUps`: up to 4 more questions asked in the same conversation in one call, one unit per answer.
+- YouTube search (`posts?query=`) takes `sort`, `period`, `duration`, `features`, `exactSpelling` and `country`; `type` adds `movies`; `groups?query=` searches playlists.
+- Instagram `posts?query=` searches posts and reels by keyword.
+- `Answer`: new `followUps`.
+
 ## 0.2.22
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20:
