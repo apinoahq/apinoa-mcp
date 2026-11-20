@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.27
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-20:
+
+- New operations: `POST /v1/meta-ai/answer`.
+
 ## 0.2.26
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20.

@@ -59,6 +59,7 @@ export const RETURNS: Record<string, string> = {
  "linkedin/group": "Group",
  "linkedin/job": "Job",
  "linkedin/jobs": "JobPage",
+ "meta-ai/answer": "Answer",
  "naver/search": "ResultsPage",
  "naver/suggestions": "Suggestions",
  "naver/places": "PlacesPage",

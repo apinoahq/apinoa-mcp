@@ -4300,6 +4300,72 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "meta-ai",
+  "kind": "answers",
+  "operations": [
+   "answer"
+  ],
+  "includes": [
+   "page"
+  ],
+  "regions": [
+   "US",
+   "CA",
+   "GB",
+   "AU",
+   "DE",
+   "IN",
+   "BR"
+  ],
+  "cost": {
+   "answer": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "answer": {
+    "type": "object",
+    "properties": {
+     "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16000,
+      "description": "The question, as a person would type it."
+     },
+     "country": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$",
+      "description": "The market the answer is asked from, as an ISO 3166 country code. Each engine's page lists its countries."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string",
+         "enum": [
+          "details",
+          "page"
+         ]
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     }
+    },
+    "required": [
+     "prompt"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  }
+ },
+ {
   "id": "naver",
   "kind": "serp",
   "operations": [
