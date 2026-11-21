@@ -21,8 +21,6 @@ export const RETURNS: Record<string, string> = {
  "baidu-wenxin/answer": "Answer",
  "bing/search": "ResultsPage",
  "bing/suggestions": "Suggestions",
- "brave/search": "ResultsPage",
- "brave/suggestions": "Suggestions",
  "chatgpt/answer": "Answer",
  "company/technologies": "TechnologiesResult",
  "copilot/answer": "Answer",

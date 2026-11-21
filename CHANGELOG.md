@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.30
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-21:
+
+- Operations removed: `GET /v1/brave/search`, `GET /v1/brave/suggestions`.
+
 ## 0.2.29
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-21:
