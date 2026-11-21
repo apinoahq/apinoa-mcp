@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.31
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-21:
+
+- Reddit reads more: `comments` takes `community` (a community's newest comments across its posts; several joined by `+`, or `all`) and `query` (comment search, optionally within one `community`); `posts` takes `domain` (posts linking to a site), `relatedTo` (Reddit's related posts, or with `type: "crossposts"` the post's crossposts), `type: "media"` with `query`, `sort: "best"` (the front page) and several communities joined by `+`; `groups` takes `type` (`popular`, `new`, `default`, or `moderated` with `username`); `profiles` takes `type` (`popular`, `new`); `group`'s `include` adds `widgets` and `wiki`.
+
 ## 0.2.30
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-21:

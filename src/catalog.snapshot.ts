@@ -4951,7 +4951,7 @@ const snapshot: unknown = [
    },
    "group": {
     "base": 1,
-    "max": 2
+    "max": 4
    },
    "groups": {
     "base": 1,
@@ -4993,6 +4993,14 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "Keywords to search accounts for."
      },
+     "type": {
+      "type": "string",
+      "enum": [
+       "popular",
+       "new"
+      ],
+      "description": "Without query: Reddit's directory of popular or newest user profiles."
+     },
      "limit": {
       "type": "integer",
       "minimum": 1,
@@ -5031,7 +5039,7 @@ const snapshot: unknown = [
      "community": {
       "type": "string",
       "minLength": 1,
-      "description": "A community's posts: name (with or without r/) or URL. With `query`, narrows the search to it."
+      "description": "A community's posts: name (with or without r/) or URL; several joined by + (SaaS+startups) for one merged feed; all or popular for the whole site. With `query`, narrows the search to one community."
      },
      "query": {
       "type": "string",
@@ -5052,6 +5060,24 @@ const snapshot: unknown = [
       ],
       "description": "Specific posts: ids, fullnames (t3_…) or URLs, 1–100 in one call."
      },
+     "domain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Posts linking to one site, across every community: its domain (github.com, i.redd.it) or a URL on it."
+     },
+     "relatedTo": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A post id or URL: the posts Reddit shows beside it as related, or with type crossposts its crossposts."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "media",
+       "crossposts"
+      ],
+      "description": "query: media (only posts with images or video) · relatedTo: crossposts (the post's copies in other communities)."
+     },
      "sort": {
       "type": "string",
       "enum": [
@@ -5061,9 +5087,10 @@ const snapshot: unknown = [
        "rising",
        "controversial",
        "relevance",
-       "comments"
+       "comments",
+       "best"
       ],
-      "description": "Order. username: new, hot, top, controversial · community: hot, new, top, rising, controversial · query: relevance, hot, top, new, comments · default feed: hot, new, top, rising."
+      "description": "Order. username: new, hot, top, controversial · community: hot, new, top, rising, controversial (several joined by +: not new) · query: relevance, hot, top, new, comments · domain: hot, new, top, rising, controversial · default feed: hot, new, top, rising, best (Reddit's front page)."
      },
      "period": {
       "type": "string",
@@ -5080,7 +5107,7 @@ const snapshot: unknown = [
      "country": {
       "type": "string",
       "minLength": 1,
-      "description": "Default feed only: the country whose popular feed to read (ISO alpha-2)."
+      "description": "Default feed only: the country whose popular feed to read (ISO alpha-2). Not with sort new or best."
      },
      "limit": {
       "type": "integer",
@@ -5115,6 +5142,16 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "A user's comments: username or profile URL."
      },
+     "community": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A community's newest comments across its posts: name (with or without r/) or URL; several joined by + (SaaS+startups); all for the whole site. With `query`, narrows the search to one community."
+     },
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Search comments by keyword."
+     },
      "sort": {
       "type": "string",
       "enum": [
@@ -5124,9 +5161,10 @@ const snapshot: unknown = [
        "controversial",
        "old",
        "qa",
-       "hot"
+       "hot",
+       "relevance"
       ],
-      "description": "Order. post: confidence (Reddit's 'best'), top, new, controversial, old, qa · username: new, hot, top, controversial."
+      "description": "Order. post: confidence (Reddit's 'best'), top, new, controversial, old, qa · username: new, hot, top, controversial · query: relevance, top, new · community: newest first, no sort."
      },
      "period": {
       "type": "string",
@@ -5175,7 +5213,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "Extra reads to attach under `ext`: rules (+1 unit). The community's style is always in `ext.style` (it comes with the community), so `style` is accepted and free."
+      "description": "Extra reads to attach under `ext`, +1 unit each: rules; widgets (the sidebar: ID card, text, buttons, menus, images, recommended communities, events, post flairs); wiki (the wiki's front page, or `available: false` with Reddit's reason). The community's style is always in `ext.style` (it comes with the community), so `style` is accepted and free."
      }
     },
     "additionalProperties": false,
@@ -5197,7 +5235,17 @@ const snapshot: unknown = [
      "username": {
       "type": "string",
       "minLength": 1,
-      "description": "The communities a user is active in: username or profile URL."
+      "description": "The communities a user is active in (with type moderated: the ones they moderate): username or profile URL."
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "popular",
+       "new",
+       "default",
+       "moderated"
+      ],
+      "description": "Alone: Reddit's directory of popular, newest or default communities · with username: moderated."
      },
      "includeNsfw": {
       "type": "boolean",
