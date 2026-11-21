@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.29
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-21:
+
+- New operations: `POST /v1/baidu-wenxin/answer`.
+
 ## 0.2.28
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-20:
