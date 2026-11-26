@@ -2242,7 +2242,8 @@ const snapshot: unknown = [
    "search",
    "suggestions",
    "places",
-   "place"
+   "place",
+   "reviews"
   ],
   "includes": [],
   "regions": [
@@ -2271,6 +2272,10 @@ const snapshot: unknown = [
     "max": 5
    },
    "place": {
+    "base": 1,
+    "max": 1
+   },
+   "reviews": {
     "base": 1,
     "max": 1
    }
@@ -2519,6 +2524,39 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "reviews": {
+    "type": "object",
+    "properties": {
+     "place": {
+      "type": "string",
+      "pattern": "0x[0-9a-f]{1,16}:0x[0-9a-f]{1,16}",
+      "description": "The place's id, as `places` returns it."
+     },
+     "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "0x[0-9a-f]{1,16}:0x[0-9a-f]{1,16}",
+      "description": "A Google Maps place URL."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevant",
+       "newest",
+       "highest",
+       "lowest"
+      ],
+      "description": "Review order: most relevant (default), newest, highest or lowest rated. Each order gives its own five reviews."
+     },
+     "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Interface language."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
    }
   },
   "ops": {
@@ -2537,6 +2575,10 @@ const snapshot: unknown = [
    "place": {
     "method": "GET",
     "returns": "SerpPlace"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "PlaceReviewsPage"
    }
   }
  },

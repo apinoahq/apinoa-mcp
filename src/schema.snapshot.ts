@@ -35,6 +35,7 @@ export const RETURNS: Record<string, string> = {
  "google/suggestions": "Suggestions",
  "google/places": "PlacesPage",
  "google/place": "SerpPlace",
+ "google/reviews": "PlaceReviewsPage",
  "google-ads/advertisers": "AdvertiserPage",
  "google-ads/advertiser": "Advertiser",
  "google-ads/ads": "AdPage",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.34
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-26:
+
+- New operations: `GET /v1/google/reviews`.
+
 ## 0.2.33
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-26:
