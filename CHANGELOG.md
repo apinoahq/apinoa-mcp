@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.32
+
+Code mode retries `UPSTREAM_RATE_LIMITED` (a platform asking us to slow down, 429) like the other temporary failures listed under [retrying](https://apinoa.com/docs/errors#retrying).
+
 ## 0.2.31
 
 Code mode's types and the bundled catalog follow the API as of 2026-11-21:

@@ -36,7 +36,7 @@ const realFetch: typeof fetch = globalThis.fetch.bind(globalThis);
 // Codes worth another try (https://apinoa.com/docs/errors#retrying). Every other failure fails the same way again.
 const RETRYABLE = new Set([
   "CAPACITY_SATURATED", "MARKETPLACE_SATURATED", "RATE_LIMITED", "SERVICE_UNAVAILABLE", "INTERNAL_ERROR",
-  "UPSTREAM_ERROR", "UPSTREAM_READ_FAILED", "UPSTREAM_TIMEOUT", "UPSTREAM_UNAVAILABLE",
+  "UPSTREAM_ERROR", "UPSTREAM_RATE_LIMITED", "UPSTREAM_READ_FAILED", "UPSTREAM_TIMEOUT", "UPSTREAM_UNAVAILABLE",
 ]);
 // Failures no other call will get past: they end the run instead of being skipped by many().
 const FATAL = new Set(["UNAUTHORIZED", "INSUFFICIENT_BALANCE", "ACCOUNT_SUSPENDED", "FORBIDDEN", "QUOTA_EXCEEDED", "BUDGET_EXCEEDED"]);
