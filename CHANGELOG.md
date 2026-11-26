@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.2.33
+
+Code mode's types and the bundled catalog follow the API as of 2026-11-26:
+
+- New operations: `GET /v1/google-ads/advertisers`, `GET /v1/google-ads/advertiser`, `GET /v1/google-ads/ads`, `GET /v1/google-ads/ad`, `GET /v1/linkedin-ads/ads`, `GET /v1/linkedin-ads/ad`, `GET /v1/meta-ads/ads`, `GET /v1/meta-ads/advertisers`, `GET /v1/tiktok-ads/ads`, `GET /v1/tiktok-ads/ad`, `GET /v1/tiktok-ads/advertisers`.
+- Operations removed: `GET /v1/facebook/profiles`, `GET /v1/facebook/ads`, `GET /v1/tiktok/ads`, `GET /v1/tiktok/ad`, `GET /v1/tiktok/advertisers`.
+- New type `Ad`.
+- New type `AdAdvertiserRef`.
+- New type `AdCard`.
+- New type `AdCountry`.
+- New type `AdImage`.
+- New type `AdLibrary`.
+- New type `AdPage`.
+- New type `AdPageResponse`.
+- New type `AdRange`.
+- New type `AdResponse`.
+- New type `AdVideo`.
+- New type `Advertiser`.
+- New type `AdvertiserPage`.
+- New type `AdvertiserPageResponse`.
+- New type `AdvertiserResponse`.
+- Type `FacebookAd` removed.
+- Type `FacebookAdCard` removed.
+- Type `FacebookAdDisclaimer` removed.
+- Type `FacebookAdImage` removed.
+- Type `FacebookAdPage` removed.
+- Type `FacebookAdVideo` removed.
+- Type `FacebookAdsPage` removed.
+- Type `FacebookAdsPageResponse` removed.
+- Type `FacebookRange` removed.
+- Type `TikTokAd` removed.
+- Type `TikTokAdDetail` removed.
+- Type `TikTokAdDetailResponse` removed.
+- Type `TikTokAdRegion` removed.
+- Type `TikTokAdVideo` removed.
+- Type `TikTokAdsPage` removed.
+- Type `TikTokAdsPageResponse` removed.
+- Type `TikTokAdvertiser` removed.
+- Type `TikTokAdvertisersPage` removed.
+- Type `TikTokAdvertisersPageResponse` removed.
+- `ReaderPage`: new `text`, `links`, `images`.
+
 ## 0.2.32
 
 Code mode retries `UPSTREAM_RATE_LIMITED` (a platform asking us to slow down, 429) like the other temporary failures listed under [retrying](https://apinoa.com/docs/errors#retrying).

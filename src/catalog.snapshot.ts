@@ -139,7 +139,7 @@ const snapshot: unknown = [
       "type": "string"
      },
      "id": {
-      "description": "AliExpress product id, as carried by a search item.",
+      "description": "AliExpress product id, as carried by a search item. Pass this or `url`.",
       "type": "string"
      },
      "include": {
@@ -156,11 +156,12 @@ const snapshot: unknown = [
      "region": {
       "description": "Buyer country (ISO 3166-1 alpha-2).",
       "type": "string"
+     },
+     "url": {
+      "description": "The product page's address instead of its id, e.g. https://www.aliexpress.com/item/1005006123456789.html (any AliExpress storefront; query string ignored). Pass this or `id`.",
+      "type": "string"
      }
     },
-    "required": [
-     "id"
-    ],
     "type": "object"
    },
    "search": {
@@ -252,7 +253,33 @@ const snapshot: unknown = [
     "type": "object"
    }
   },
-  "kind": "marketplace"
+  "kind": "marketplace",
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "browse": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "categories": {
+    "method": "GET",
+    "returns": "CategoryList"
+   },
+   "image-search": {
+    "method": "POST",
+    "returns": "SearchResult"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
+   },
+   "shipping": {
+    "method": "GET",
+    "returns": "ShippingQuote"
+   }
+  }
  },
  {
   "id": "amazon",
@@ -434,9 +461,10 @@ const snapshot: unknown = [
        "price_asc",
        "price_desc",
        "newly_listed",
-       "avg_review"
+       "avg_review",
+       "best_seller"
       ],
-      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed` or `avg_review`. Defaults to `best_match`, Amazon's own relevance ordering."
+      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed`, `avg_review` or `best_seller`. Defaults to `best_match`, Amazon's own relevance ordering."
      }
     },
     "required": [
@@ -528,9 +556,10 @@ const snapshot: unknown = [
        "price_asc",
        "price_desc",
        "newly_listed",
-       "avg_review"
+       "avg_review",
+       "best_seller"
       ],
-      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed` or `avg_review`. Defaults to `best_match`, Amazon's own relevance ordering."
+      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed`, `avg_review` or `best_seller`. Defaults to `best_match`, Amazon's own relevance ordering."
      }
     },
     "required": [
@@ -645,9 +674,10 @@ const snapshot: unknown = [
        "price_asc",
        "price_desc",
        "newly_listed",
-       "avg_review"
+       "avg_review",
+       "best_seller"
       ],
-      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed` or `avg_review`. Defaults to `best_match`, Amazon's own relevance ordering."
+      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed`, `avg_review` or `best_seller`. Defaults to `best_match`, Amazon's own relevance ordering."
      }
     },
     "required": [
@@ -732,6 +762,28 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "image-search": {
+    "method": "POST",
+    "returns": "SearchResult"
+   },
+   "browse": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "categories": {
+    "method": "GET",
+    "returns": "CategoryList"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
    }
   }
  },
@@ -1081,6 +1133,20 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "AppsPage"
+   },
+   "app": {
+    "method": "GET",
+    "returns": "App"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "AppReviewsPage"
+   }
   }
  },
  {
@@ -1186,6 +1252,16 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   }
   }
  },
  {
@@ -1248,6 +1324,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -1407,6 +1489,16 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   }
   }
  },
  {
@@ -1498,6 +1590,12 @@ const snapshot: unknown = [
        }
       ],
       "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Ask as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. The place must be in the country asked."
      }
     },
     "required": [
@@ -1505,6 +1603,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -1540,6 +1644,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "technologies": {
+    "method": "GET",
+    "returns": "TechnologiesResult"
    }
   }
  },
@@ -1626,6 +1736,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -1734,6 +1850,16 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   }
   }
  },
  {
@@ -1809,6 +1935,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -1956,15 +2088,23 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   }
   }
  },
  {
   "id": "facebook",
   "kind": "sns",
   "operations": [
-   "profile",
-   "profiles",
-   "ads"
+   "profile"
   ],
   "includes": [],
   "regions": [
@@ -1972,14 +2112,6 @@ const snapshot: unknown = [
   ],
   "cost": {
    "profile": {
-    "base": 1,
-    "max": 1
-   },
-   "profiles": {
-    "base": 1,
-    "max": 1
-   },
-   "ads": {
     "base": 1,
     "max": 1
    }
@@ -1996,141 +2128,12 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
-   },
-   "profiles": {
-    "type": "object",
-    "properties": {
-     "query": {
-      "type": "string",
-      "minLength": 1,
-      "description": "An advertiser's name (or part of it): the Pages the Ad Library's search box suggests for it, each with the `id` that `ads?pageId=` takes."
-     },
-     "country": {
-      "type": "string",
-      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
-     },
-     "adType": {
-      "type": "string",
-      "enum": [
-       "all",
-       "political",
-       "housing",
-       "employment",
-       "credit"
-      ],
-      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
-     }
-    },
-    "additionalProperties": false,
-    "$schema": "http://json-schema.org/draft-07/schema#"
-   },
-   "ads": {
-    "type": "object",
-    "properties": {
-     "query": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Keywords to search the Ad Library for."
-     },
-     "pageId": {
-      "type": "string",
-      "pattern": "^\\d+$",
-      "description": "Every ad one advertiser runs: its numeric Page id (`profile` returns it as `id`; `profiles?query=` finds it by name)."
-     },
-     "exact": {
-      "type": "boolean",
-      "description": "query: match the exact phrase instead of any of its words."
-     },
-     "country": {
-      "type": "string",
-      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
-     },
-     "status": {
-      "type": "string",
-      "enum": [
-       "active",
-       "inactive",
-       "all"
-      ],
-      "description": "active (default), inactive or all."
-     },
-     "adType": {
-      "type": "string",
-      "enum": [
-       "all",
-       "political",
-       "housing",
-       "employment",
-       "credit"
-      ],
-      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
-     },
-     "mediaType": {
-      "type": "string",
-      "enum": [
-       "all",
-       "image",
-       "video",
-       "meme",
-       "image_and_meme",
-       "none"
-      ],
-      "description": "all (default), image, video, meme, image_and_meme, none."
-     },
-     "platforms": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "array",
-        "items": {
-         "type": "string"
-        }
-       }
-      ],
-      "description": "Only ads that ran on these platforms."
-     },
-     "languages": {
-      "anyOf": [
-       {
-        "type": "string"
-       },
-       {
-        "type": "array",
-        "items": {
-         "type": "string"
-        }
-       }
-      ],
-      "description": "Only ads in these languages (ISO 639-1)."
-     },
-     "startDate": {
-      "type": "string",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-      "description": "Only ads that started running on or after this day (YYYY-MM-DD)."
-     },
-     "endDate": {
-      "type": "string",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-      "description": "Only ads that started running on or before this day (YYYY-MM-DD)."
-     },
-     "sort": {
-      "type": "string",
-      "enum": [
-       "relevance",
-       "impressions"
-      ],
-      "description": "relevance (default), or impressions (highest first; Facebook states impressions for political ads)."
-     },
-     "cursor": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
-     }
-    },
-    "additionalProperties": false,
-    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
    }
   }
  },
@@ -2210,6 +2213,12 @@ const snapshot: unknown = [
        }
       ],
       "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Ask as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. The place must be in the country asked."
      }
     },
     "required": [
@@ -2217,6 +2226,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -2253,7 +2268,7 @@ const snapshot: unknown = [
    },
    "places": {
     "base": 1,
-    "max": 3
+    "max": 5
    },
    "place": {
     "base": 1,
@@ -2357,6 +2372,12 @@ const snapshot: unknown = [
       "maximum": 10,
       "description": "Result pages to read in one call (1-10), returned as one list. Instead of `limit`; each page past the first is charged as one more unit."
      },
+     "page": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "The result page to start at (1-10): `page=3` reads page 3 alone, the way Google numbers its pages. With `pages` or `limit`, reading goes on from there (no further than page 10). Not with `cursor`, which already knows its page."
+     },
      "cursor": {
       "type": "string",
       "minLength": 1,
@@ -2452,14 +2473,20 @@ const snapshot: unknown = [
      "limit": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 60,
-      "description": "Results wanted (default 20, at most 60). More than one page is charged per page."
+      "maximum": 100,
+      "description": "Results wanted (default 20, at most 100). More than one page is charged per page."
      },
      "pages": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 3,
-      "description": "Pages of 20 places to read in one call (1-3), returned as one list. Instead of `limit`; each page past the first is charged as one more unit."
+      "maximum": 5,
+      "description": "Pages of 20 places to read in one call (1-5), returned as one list. Instead of `limit`; each page past the first is charged as one more unit."
+     },
+     "page": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "The page of 20 places to start at (1-5): `page=3` reads places 41-60 alone. With `pages` or `limit`, reading goes on from there (no further than page 5). Not with `cursor`, which already knows its page."
      },
      "cursor": {
       "type": "string",
@@ -2492,6 +2519,232 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   },
+   "places": {
+    "method": "GET",
+    "returns": "PlacesPage"
+   },
+   "place": {
+    "method": "GET",
+    "returns": "SerpPlace"
+   }
+  }
+ },
+ {
+  "id": "google-ads",
+  "kind": "ads",
+  "operations": [
+   "advertisers",
+   "advertiser",
+   "ads",
+   "ad"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "advertisers": {
+    "base": 1,
+    "max": 1
+   },
+   "advertiser": {
+    "base": 1,
+    "max": 1
+   },
+   "ads": {
+    "base": 1,
+    "max": 1
+   },
+   "ad": {
+    "base": 1,
+    "max": 11
+   }
+  },
+  "params": {
+   "advertisers": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An advertiser's name or a website: the advertisers whose name matches, each with the `id` that `ads?advertiser=` takes, and the matching websites (for `ads?domain=`)."
+     },
+     "country": {
+      "type": "string",
+      "description": "Only advertisers whose ads were shown in this country (ISO 3166-1 alpha-2). Default: anywhere."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Advertisers per page, 1–100. Up to 10 (the default) also lists matching websites; more pages through every advertiser that matches."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "advertiser": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The advertiser id (AR…), or its Transparency Center URL."
+     },
+     "country": {
+      "type": "string",
+      "description": "The country to read the advertiser for (ISO 3166-1 alpha-2). Default: anywhere."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "ads": {
+    "type": "object",
+    "properties": {
+     "advertiser": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Every ad these advertisers ran: up to 10 advertiser ids (AR…), comma-separated (`advertisers?query=` finds one by name)."
+     },
+     "domain": {
+      "type": "string",
+      "description": "Every ad that leads to this website (nike.com), whichever advertiser ran it."
+     },
+     "country": {
+      "type": "string",
+      "description": "Only ads shown in this country (ISO 3166-1 alpha-2). Default: anywhere."
+     },
+     "platform": {
+      "type": "string",
+      "enum": [
+       "play",
+       "maps",
+       "search",
+       "shopping",
+       "youtube"
+      ],
+      "description": "Only ads shown on this Google platform: search, youtube, shopping, maps or play."
+     },
+     "format": {
+      "type": "string",
+      "enum": [
+       "text",
+       "image",
+       "video"
+      ],
+      "description": "Only ads of this format: text, image or video."
+     },
+     "startDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads shown on or after this day (YYYY-MM-DD)."
+     },
+     "endDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads shown on or before this day (YYYY-MM-DD)."
+     },
+     "political": {
+      "type": "boolean",
+      "description": "Political ads only (the Transparency Center's political ads report): these state impressions, spend and regions."
+     },
+     "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Ads per page, 1–100 (default 40)."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "ad": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The ad's id (CR…) with `advertiser`, or the ad's Transparency Center URL (…/advertiser/AR…/creative/CR…)."
+     },
+     "advertiser": {
+      "type": "string",
+      "pattern": "^AR\\d{10,30}$",
+      "description": "The advertiser id (AR…) that ran the ad; not needed with the ad's URL."
+     },
+     "country": {
+      "type": "string",
+      "description": "The country to read the ad for: it decides which countries come back, and in the EU their impressions. Default: the URL's region, else anywhere."
+     },
+     "political": {
+      "type": "boolean",
+      "description": "Read the ad from the political ads report (as `ads?political=true` lists it)."
+     },
+     "include": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "content: also read each version's preview — the ad's text and pictures as it shows them, in `cards`. Best-effort: one unit per preview read; a preview that cannot be read is not billed and the ad is still returned."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "advertisers": {
+    "method": "GET",
+    "returns": "AdvertiserPage"
+   },
+   "advertiser": {
+    "method": "GET",
+    "returns": "Advertiser"
+   },
+   "ads": {
+    "method": "GET",
+    "returns": "AdPage"
+   },
+   "ad": {
+    "method": "GET",
+    "returns": "Ad"
    }
   }
  },
@@ -2575,6 +2828,12 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
+   }
   }
  },
  {
@@ -2650,6 +2909,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -3013,6 +3278,20 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "AppsPage"
+   },
+   "app": {
+    "method": "GET",
+    "returns": "App"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "AppReviewsPage"
+   }
   }
  },
  {
@@ -3127,6 +3406,17 @@ const snapshot: unknown = [
       ],
       "description": "The market, ISO 3166-1 alpha-2: US (default), GB, CA, AU. Sets the shops, prices and currency."
      },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Shop as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name. It must be in the market asked (`region`). A name that matches more than one place is refused with the candidates."
+     },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Search as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
+     },
      "cursor": {
       "type": "string",
       "description": "Next page: pass the previous result's `cursor` alone."
@@ -3161,6 +3451,17 @@ const snapshot: unknown = [
        "AU"
       ],
       "description": "The market, ISO 3166-1 alpha-2: US (default), GB, CA, AU. Sets the shops, prices and currency."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Shop as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name. It must be in the market asked (`region`). A name that matches more than one place is refused with the candidates."
+     },
+     "uule": {
+      "type": "string",
+      "pattern": "^[wa][+ ][A-Za-z0-9+/_-]+={0,2}$",
+      "description": "Search as if from this place, as Google's own `uule` value (`w+…`). Instead of `near`."
      }
     },
     "additionalProperties": false,
@@ -3186,6 +3487,20 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "ReviewPage"
    }
   }
  },
@@ -3980,6 +4295,16 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "explore": {
+    "method": "GET",
+    "returns": "TrendsExplore"
+   },
+   "trending": {
+    "method": "GET",
+    "returns": "TrendingPage"
+   }
   }
  },
  {
@@ -4195,6 +4520,32 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
+   },
+   "group": {
+    "method": "GET",
+    "returns": "Group"
+   },
+   "groups": {
+    "method": "GET",
+    "returns": "GroupPage"
+   }
   }
  },
  {
@@ -4351,6 +4702,15 @@ const snapshot: unknown = [
       "minLength": 1,
       "description": "Location name (e.g. United States). Default: worldwide."
      },
+     "postedWithin": {
+      "type": "string",
+      "enum": [
+       "day",
+       "week",
+       "month"
+      ],
+      "description": "Only jobs posted within the past day, week, or month."
+     },
      "cursor": {
       "type": "string",
       "minLength": 1,
@@ -4359,6 +4719,343 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
+   },
+   "group": {
+    "method": "GET",
+    "returns": "Group"
+   },
+   "job": {
+    "method": "GET",
+    "returns": "Job"
+   },
+   "jobs": {
+    "method": "GET",
+    "returns": "JobPage"
+   }
+  }
+ },
+ {
+  "id": "linkedin-ads",
+  "kind": "ads",
+  "operations": [
+   "ads",
+   "ad"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "ads": {
+    "base": 1,
+    "max": 1
+   },
+   "ad": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "ads": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Keywords to search the Ad Library for."
+     },
+     "advertiser": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Every ad one company runs, by its numeric LinkedIn company id (an ad's `advertiser.id`)."
+     },
+     "company": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Every ad one company runs: its vanity name (e.g. microsoft), its company URL, or its numeric LinkedIn company id."
+     },
+     "advertiserName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Ads from advertisers whose name matches this one (LinkedIn matches loosely: \"Microsoft\" also finds \"Microsoft Azure\"). For one company exactly, use `advertiser` or `company`."
+     },
+     "payer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Ads paid for by this payer, as an ad's `paidBy` names it."
+     },
+     "country": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Only ads shown in these countries: ISO 3166-1 alpha-2 codes, comma-separated (e.g. DE,FR). Default: every country."
+     },
+     "dateOption": {
+      "type": "string",
+      "enum": [
+       "last-30-days",
+       "current-month",
+       "current-year",
+       "last-year"
+      ],
+      "description": "Only ads shown in this window: last-30-days, current-month, current-year or last-year. Default: the last twelve months."
+     },
+     "startDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "With endDate: only ads shown from this day (YYYY-MM-DD), at most twelve months back."
+     },
+     "endDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "With startDate: only ads shown up to this day (YYYY-MM-DD)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "newest",
+       "oldest"
+      ],
+      "description": "newest first (default) or oldest first."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "ad": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The ad's Ad Library id, or its Ad Library URL (linkedin.com/ad-library/detail/<id>)."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "ads": {
+    "method": "GET",
+    "returns": "AdPage"
+   },
+   "ad": {
+    "method": "GET",
+    "returns": "Ad"
+   }
+  }
+ },
+ {
+  "id": "meta-ads",
+  "kind": "ads",
+  "operations": [
+   "ads",
+   "advertisers"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "ads": {
+    "base": 1,
+    "max": 1
+   },
+   "advertisers": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "ads": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Keywords to search the Ad Library for."
+     },
+     "advertiser": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "The advertiser's id, as `advertisers` returns it (or an ad's `advertiser.id`): every ad it runs. With `query`, up to 10 ids, comma-separated, narrow the keyword search to those advertisers."
+     },
+     "exact": {
+      "type": "boolean",
+      "description": "query: match the exact phrase instead of any of its words."
+     },
+     "country": {
+      "type": "string",
+      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "active",
+       "inactive",
+       "all"
+      ],
+      "description": "active (default), inactive or all."
+     },
+     "adType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "political",
+       "housing",
+       "employment",
+       "credit"
+      ],
+      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
+     },
+     "mediaType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "image",
+       "video",
+       "meme",
+       "image_and_meme",
+       "none"
+      ],
+      "description": "all (default), image, video, meme, image_and_meme, none."
+     },
+     "platforms": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Only ads that ran on these platforms."
+     },
+     "languages": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      ],
+      "description": "Only ads in these languages (ISO 639-1)."
+     },
+     "startDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads that started running on or after this day (YYYY-MM-DD)."
+     },
+     "endDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Only ads that started running on or before this day (YYYY-MM-DD)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "relevance",
+       "impressions"
+      ],
+      "description": "relevance (default), or impressions (highest first; Facebook states impressions for political ads)."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "advertisers": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "An advertiser's name (or part of it): the advertisers the Ad Library's search box suggests, each with the `id` that `ads?advertiser=` takes."
+     },
+     "country": {
+      "type": "string",
+      "description": "Where the ads ran: an ISO 3166-1 alpha-2 code, or ALL (default)."
+     },
+     "adType": {
+      "type": "string",
+      "enum": [
+       "all",
+       "political",
+       "housing",
+       "employment",
+       "credit"
+      ],
+      "description": "all (default), or one special category: political (social issues, elections or politics), housing, employment, credit."
+     }
+    },
+    "required": [
+     "query"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "ads": {
+    "method": "GET",
+    "returns": "AdPage"
+   },
+   "advertisers": {
+    "method": "GET",
+    "returns": "AdvertiserPage"
    }
   }
  },
@@ -4418,6 +5115,12 @@ const snapshot: unknown = [
        }
       ],
       "description": "`page`: also return the answer as a self-contained HTML page, in `page`."
+     },
+     "near": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Ask as if from this place: a city, region or US state (\"Austin, Texas\", \"Austin, TX\", \"Texas\"), or Google's canonical location name (\"Austin,Texas,United States\"). A name that matches more than one place is refused with the candidates. The place must be in the country asked."
      }
     },
     "required": [
@@ -4425,6 +5128,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -4646,6 +5355,28 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   },
+   "places": {
+    "method": "GET",
+    "returns": "PlacesPage"
+   },
+   "place": {
+    "method": "GET",
+    "returns": "SerpPlace"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "PlaceReviewsPage"
+   }
   }
  },
  {
@@ -4705,6 +5436,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -4771,6 +5508,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
    }
   }
  },
@@ -4847,6 +5590,12 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "answer": {
+    "method": "POST",
+    "returns": "Answer"
+   }
   }
  },
  {
@@ -4887,13 +5636,13 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "Extra fields, comma-separated: `html` (the page as fetched), `contentHtml` (its main content as HTML)."
+      "description": "Extra fields, comma-separated: `html` (the page as fetched), `contentHtml` (its main content as HTML), `text` (its main content as plain text), `links` (the links in its main content), `images` (the images in its main content)."
      },
      "maxChars": {
       "type": "integer",
       "minimum": 100,
       "maximum": 1000000,
-      "description": "Cut `markdown` to at most this many characters, at a paragraph break where one is near; `truncated` is then true."
+      "description": "Cut `markdown` (and `text`) to at most this many characters, at a paragraph break where one is near; `truncated` is then true."
      },
      "country": {
       "type": "string",
@@ -4909,6 +5658,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "page": {
+    "method": "GET",
+    "returns": "ReaderPage"
    }
   }
  },
@@ -5266,6 +6021,36 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "profiles": {
+    "method": "GET",
+    "returns": "AccountPage"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
+   },
+   "group": {
+    "method": "GET",
+    "returns": "Group"
+   },
+   "groups": {
+    "method": "GET",
+    "returns": "GroupPage"
+   }
   }
  },
  {
@@ -5372,6 +6157,16 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
    }
   }
  },
@@ -5661,6 +6456,28 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "image-search": {
+    "method": "POST",
+    "returns": "SearchResult"
+   },
+   "catalog": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "ReviewPage"
+   }
   }
  },
  {
@@ -5767,6 +6584,16 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
    }
   }
  },
@@ -5955,6 +6782,24 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
    }
   }
  },
@@ -6225,6 +7070,242 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "profiles": {
+    "method": "GET",
+    "returns": "AccountPage"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
+   },
+   "group": {
+    "method": "GET",
+    "returns": "Group"
+   },
+   "groups": {
+    "method": "GET",
+    "returns": "GroupPage"
+   },
+   "media": {
+    "method": "GET",
+    "returns": "MediaFile"
+   }
+  }
+ },
+ {
+  "id": "tiktok-ads",
+  "kind": "ads",
+  "operations": [
+   "ads",
+   "ad",
+   "advertisers"
+  ],
+  "includes": [],
+  "regions": [
+   "AT",
+   "BE",
+   "BG",
+   "HR",
+   "CY",
+   "CZ",
+   "DK",
+   "EE",
+   "FI",
+   "FR",
+   "DE",
+   "GR",
+   "HU",
+   "IE",
+   "IT",
+   "LV",
+   "LT",
+   "LU",
+   "MT",
+   "NL",
+   "PL",
+   "PT",
+   "RO",
+   "SK",
+   "SI",
+   "ES",
+   "SE",
+   "IS",
+   "LI",
+   "NO",
+   "CH",
+   "GB",
+   "TR",
+   "BR"
+  ],
+  "cost": {
+   "ads": {
+    "base": 1,
+    "max": 1
+   },
+   "ad": {
+    "base": 1,
+    "max": 1
+   },
+   "advertisers": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "ads": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Keywords to search the library's ads for."
+     },
+     "advertiserName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Every ad one advertiser ran: its name exactly as `advertisers` lists it."
+     },
+     "advertiser": {
+      "type": "string",
+      "minLength": 1,
+      "description": "With `advertiserName`: the advertiser's id (`advertisers` and an ad's `advertiser.id` give it), which saves the name lookup. A comma list where the library lists several."
+     },
+     "country": {
+      "type": "string",
+      "enum": [
+       "AT",
+       "BE",
+       "BG",
+       "HR",
+       "CY",
+       "CZ",
+       "DK",
+       "EE",
+       "FI",
+       "FR",
+       "DE",
+       "GR",
+       "HU",
+       "IE",
+       "IT",
+       "LV",
+       "LT",
+       "LU",
+       "MT",
+       "NL",
+       "PL",
+       "PT",
+       "RO",
+       "SK",
+       "SI",
+       "ES",
+       "SE",
+       "IS",
+       "LI",
+       "NO",
+       "CH",
+       "GB",
+       "TR",
+       "BR"
+      ],
+      "description": "Where the ads were shown (required): one of AT, BE, BG, HR, CY, CZ, DK, EE, FI, FR, DE, GR, HU, IE, IT, LV, LT, LU, MT, NL, PL, PT, RO, SK, SI, ES, SE, IS, LI, NO, CH, GB, TR, BR — the EU, the EEA, Switzerland, the UK, Turkey and Brazil (not the US), which is what the library covers."
+     },
+     "startDate": {
+      "type": "string",
+      "minLength": 1,
+      "description": "First day shown, YYYY-MM-DD (default: 30 days before `endDate`)."
+     },
+     "endDate": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Last day shown, YYYY-MM-DD (default: today)."
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "lastShown",
+       "created",
+       "impressions"
+      ],
+      "description": "Order: the day last shown (default), creation, or impressions."
+     },
+     "order": {
+      "type": "string",
+      "enum": [
+       "desc",
+       "asc"
+      ],
+      "description": "desc (default) or asc."
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "all",
+       "active"
+      ],
+      "description": "all ads (default), or only those still running."
+     },
+     "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque cursor from the previous page's `cursor`. Pass it alone for the next page."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "ad": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The ad's id in the library, or its library URL (…/ads/detail/?ad_id=<id>)."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "advertisers": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An advertiser's name, or part of it: the advertisers the library's search box suggests, each with the `name` and `id` that `ads?advertiserName=&advertiser=` take."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "ads": {
+    "method": "GET",
+    "returns": "AdPage"
+   },
+   "ad": {
+    "method": "GET",
+    "returns": "Ad"
+   },
+   "advertisers": {
+    "method": "GET",
+    "returns": "AdvertiserPage"
+   }
   }
  },
  {
@@ -6379,6 +7460,32 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "browse": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "categories": {
+    "method": "GET",
+    "returns": "CategoryList"
+   },
+   "catalog": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "ReviewPage"
    }
   }
  },
@@ -6596,6 +7703,20 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "places": {
+    "method": "GET",
+    "returns": "PlacesPage"
+   },
+   "place": {
+    "method": "GET",
+    "returns": "SerpPlace"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "PlaceReviewsPage"
+   }
   }
  },
  {
@@ -6679,6 +7800,12 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "request": {
+    "method": "POST",
+    "returns": "UnlockResult"
    }
   }
  },
@@ -6814,9 +7941,10 @@ const snapshot: unknown = [
        "price_asc",
        "price_desc",
        "newly_listed",
-       "best_seller"
+       "best_seller",
+       "avg_review"
       ],
-      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed` or `best_seller`. Defaults to `best_match`, Walmart's own relevance ordering."
+      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed`, `best_seller` or `avg_review` (highest rated). Defaults to `best_match`, Walmart's own relevance ordering."
      }
     },
     "required": [
@@ -6915,9 +8043,10 @@ const snapshot: unknown = [
        "price_asc",
        "price_desc",
        "newly_listed",
-       "best_seller"
+       "best_seller",
+       "avg_review"
       ],
-      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed` or `best_seller`. Defaults to `best_match`, Walmart's own relevance ordering."
+      "description": "Result ordering: `best_match`, `price_asc`, `price_desc`, `newly_listed`, `best_seller` or `avg_review` (highest rated). Defaults to `best_match`, Walmart's own relevance ordering."
      }
     },
     "required": [
@@ -6987,6 +8116,28 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "browse": {
+    "method": "GET",
+    "returns": "SearchResult"
+   },
+   "categories": {
+    "method": "GET",
+    "returns": "CategoryList"
+   },
+   "product": {
+    "method": "GET",
+    "returns": "Product"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "ReviewPage"
    }
   }
  },
@@ -7085,6 +8236,24 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "group": {
+    "method": "GET",
+    "returns": "Group"
    }
   }
  },
@@ -7237,6 +8406,16 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   }
   }
  },
  {
@@ -7343,6 +8522,16 @@ const snapshot: unknown = [
     ],
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
    }
   }
  },
@@ -7606,6 +8795,28 @@ const snapshot: unknown = [
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
    }
+  },
+  "ops": {
+   "search": {
+    "method": "GET",
+    "returns": "ResultsPage"
+   },
+   "suggestions": {
+    "method": "GET",
+    "returns": "Suggestions"
+   },
+   "places": {
+    "method": "GET",
+    "returns": "PlacesPage"
+   },
+   "place": {
+    "method": "GET",
+    "returns": "SerpPlace"
+   },
+   "reviews": {
+    "method": "GET",
+    "returns": "PlaceReviewsPage"
+   }
   }
  },
  {
@@ -7713,7 +8924,7 @@ const snapshot: unknown = [
         }
        }
       ],
-      "description": "Extra reads to attach under `ext`: transcript (the video's captions as timed segments, with every caption track it ships; +1 unit)."
+      "description": "Extra reads to attach under `ext`: transcript (the video's captions as timed segments, with every caption track it ships; +1 unit) · related (the videos YouTube recommends beside it, ext.related; no extra cost)."
      },
      "lang": {
       "anyOf": [
@@ -7732,6 +8943,11 @@ const snapshot: unknown = [
      "generated": {
       "type": "boolean",
       "description": "include=transcript only: true for the auto-generated (speech recognition) track, false for a track the creator supplied. Default: the creator's first."
+     },
+     "trackName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "include=transcript only: read the caption track of this name, when several share a language (a track's `ext.trackName` or `ext.name` in `ext.transcript.tracks`, case-insensitive)."
      }
     },
     "additionalProperties": false,
@@ -7774,15 +8990,17 @@ const snapshot: unknown = [
        "live",
        "community"
       ],
-      "description": "username/userId: which channel tab — videos (default), shorts, live or community · query: only videos, only shorts or only movies (omitted: YouTube's mixed results page, Shorts shelves included)."
+      "description": "username/userId: which channel tab — videos (default), shorts, live or community · query: only videos, only shorts or only movies (omitted: YouTube's mixed results page, Shorts shelves included) · hashtag: shorts (the hashtag's Shorts tab; omitted: all its videos)."
      },
      "sort": {
       "type": "string",
       "enum": [
        "relevance",
-       "top"
+       "top",
+       "recent",
+       "oldest"
       ],
-      "description": "query only: relevance (default) or top (YouTube's Popularity order, which leans on views; not a strict view-count sort)."
+      "description": "query: relevance (default) or top (YouTube's Popularity order, which leans on views; not a strict view-count sort) · username/userId (videos, shorts or live): recent (default, newest first), top (the channel's Popular order) or oldest."
      },
      "period": {
       "type": "string",
@@ -7825,7 +9043,7 @@ const snapshot: unknown = [
      "country": {
       "type": "string",
       "minLength": 1,
-      "description": "query: the country YouTube ranks the search for (ISO alpha-2, default US; it biases the ranking, it does not restrict it) · default feed: the country whose trending feed to read (default US)."
+      "description": "query, hashtag, relatedTo: the country YouTube ranks the results for (ISO alpha-2, default US; it biases the ranking, it does not restrict it) · default feed: the country whose trending feed to read (default US)."
      },
      "cursor": {
       "type": "string",
@@ -7908,6 +9126,32 @@ const snapshot: unknown = [
     },
     "additionalProperties": false,
     "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "profiles": {
+    "method": "GET",
+    "returns": "AccountPage"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   },
+   "comments": {
+    "method": "GET",
+    "returns": "CommentPage"
+   },
+   "groups": {
+    "method": "GET",
+    "returns": "GroupPage"
    }
   }
  }
