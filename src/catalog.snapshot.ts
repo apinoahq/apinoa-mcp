@@ -8300,6 +8300,85 @@ const snapshot: unknown = [
   }
  },
  {
+  "id": "xiaohongshu",
+  "kind": "sns",
+  "operations": [
+   "profile",
+   "post",
+   "posts"
+  ],
+  "includes": [],
+  "regions": [
+   "US"
+  ],
+  "cost": {
+   "profile": {
+    "base": 1,
+    "max": 1
+   },
+   "post": {
+    "base": 1,
+    "max": 1
+   },
+   "posts": {
+    "base": 1,
+    "max": 1
+   }
+  },
+  "params": {
+   "profile": {
+    "type": "object",
+    "properties": {
+     "username": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The account's user id (24 hex characters, from its profile link), or the profile link."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "post": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The note's id (24 hex characters), or its link."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   },
+   "posts": {
+    "type": "object",
+    "properties": {
+     "username": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Not served: the profile page lists a creator's posts without their ids. Ask `profile`, whose `ext.posts` lists them."
+     }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+   }
+  },
+  "ops": {
+   "profile": {
+    "method": "GET",
+    "returns": "Account"
+   },
+   "post": {
+    "method": "GET",
+    "returns": "Post"
+   },
+   "posts": {
+    "method": "GET",
+    "returns": "PostPage"
+   }
+  }
+ },
+ {
   "id": "yahoo",
   "kind": "serp",
   "operations": [
